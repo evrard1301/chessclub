@@ -1,0 +1,109 @@
+\begin{frame}{Présentation}
+
+  \begin{center}
+    \includegraphics[scale=0.5]{img/logo_ufc.png}
+    \hspace{1em}
+    \includegraphics[scale=0.3]{img/logo_ocr.png}
+  \end{center}
+  
+  \begin{block}{Bérenger Ossété Gombé}
+    \begin{itemize}
+    \item Master 1 en informatique (2016-2017)
+      \begin{itemize}
+      \item Université de Franche-Comté (UFR-ST)
+      \item Spécialité génie logiciel
+      \end{itemize}
+    \item Formation Python chez OpenClassRooms depuis janvier 2022
+    \end{itemize}    
+  \end{block}
+\end{frame}
+
+\begin{frame}{Le projet: développer une application python}
+
+  \begin{block}{Objectifs}
+    \begin{itemize}
+    \item Produire du code robuste
+    \item Utiliser la POO
+    \item Structurer un projet python
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Contexte fictif: le club d'échecs}
+  \begin{figure}
+    \begin{center}
+      \includegraphics[scale=0.2]{img/logo_club.png}    
+    \end{center}    
+    \caption{Logo du club d'échecs}    
+  \end{figure}
+  
+  \begin{block}{Personnages}
+    \begin{itemize}
+    \item Nous incarnons un développeur indépendant
+    \item Quelques membres du club d'échecs
+      \begin{itemize}
+      \item Élie, notre amie
+      \item Édouard, l'oganisateur
+      \item Charlie, l'assistant informatique
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Contexte fictif: le club d'échecs}
+  \begin{block}{Problématique}
+    \begin{itemize}
+    \item «\textit{Nous utilisons actuellement une \textbf{application
+        en ligne} pour nous aider à gérer nos tournois d'échecs
+      hebdomadaires. Malheureusement, cette application nous a déçus par
+      le passé. Elle \textbf{tombe souvent en panne}, ce qui signifie
+      que les matchs sont retardés.}» - \underline{Spécification technique}
+
+    \item «\textit{Après que nous avons eu terminé le premier tour,
+      \textbf{Internet a cessé de fonctionner} et le directeur du tournoi n'a
+      pas pu entrer les scores sur le site des résultats}» - \underline{Témoignage d'Élie}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Le besoin client}
+  \begin{block}{Exigences fonctionnelles}
+    \begin{itemize}
+    \item Gestion des tournois
+    \item Gestion des classements
+    \item Génération de rapports pouvant être exportés\footnote{Il faut permettre cette future fonctionnalité.}
+    \item Fonctionnement hors-ligne
+    \item Interaction utilisateur \textit{via} une interface console
+    \item Persistance \textit{via} une base de données
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Le besoin client}
+  \begin{block}{Exigences non-fonctionnelles \footnote{Extraites de la spécification technique.}}
+    \begin{itemize}
+    \item \textbf{Maintenabilité}
+      \begin{itemize}
+      \item «\textit{Le code doit être \underline{aussi propre et maintenable que
+        possible} pour éviter les bugs.}»
+      \end{itemize}
+    \item \textbf{Fiabilité}
+      \begin{itemize}
+      \item «\textit{Le code doit être aussi propre et maintenable que
+        possible pour \underline{éviter les bugs}.}»
+      \end{itemize}
+
+    \item \textbf{Portabilité} (GNU/Linux, Windows, MacOS)
+      \begin{itemize}
+      \item «\textit{Le programme devrait fonctionner sous
+        \underline{Windows, Mac ou Linux}}»
+      \end{itemize}
+
+    \item \textbf{Utilisabilité}
+      \begin{itemize}
+      \item «\textit{Tant que le programme affiche les résultats du
+        tournoi \underline{proprement}, nous serons heureux !}»
+      \end{itemize}      
+    \end{itemize}
+  \end{block}
+\end{frame}

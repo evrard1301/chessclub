@@ -1,0 +1,48 @@
+\documentclass[pdf]{beamer}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usetheme{Rochester}
+\usecolortheme{whale}
+
+\title{Développez un programme logiciel en Python}
+\subtitle{OpenClassRooms - Parcours Python - Projet 4}
+\author{Bérenger Ossété Gombé}
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\AtBeginSection[]{
+  \begin{frame}{Rappel du sommaire}
+    \setcounter{tocdepth}{2}
+    \tableofcontents[currentsection, hideothersubsections]
+  \end{frame}
+}
+
+\begin{frame}{Sommaire}
+  \setcounter{tocdepth}{65536}
+  \tableofcontents
+\end{frame}
+
+\section{Introduction}
+\input{intro.tex}
+
+\section{Méthodes et outils}
+\input{methodes.tex}
+
+\section{Modélisation objet}
+\input{modelisation.tex}
+
+\section{Démonstration}
+\input{demo.tex}
+
+\section{Conclusion}
+\input{conclusion.tex}
+
+\begin{frame}{Merci de votre attention}
+  \setcounter{tocdepth}{32}
+  \tableofcontents
+\end{frame}
+
+\end{document}

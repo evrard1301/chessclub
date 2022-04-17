@@ -1,0 +1,79 @@
+\subsection{Agilité et tests}
+\begin{frame}{Agilité}
+  \begin{block}{Mise en place du backlog}
+    \begin{itemize}
+    \item Utilisation d'un tableau Kanban \textit{via} kanboard \footnote{\url{https://kanboard.org/}}
+    \item Découpage des \textit{user stories} avec critères d'acceptations
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Tests}
+  \begin{block}{Pourquoi tester ?}
+    \begin{itemize}   
+    \item La fiabilité est un enjeu du projet
+      \begin{itemize}
+      \item «\textit{Le code doit être aussi propre et maintenable que
+        possible \textbf{pour éviter les bugs}.}»\footnote{D'après la
+      spécification technique.}
+      \end{itemize}
+    \item L'algorithme du tournoi Suisse doit être fiable car au cœur
+      du domaine métier
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Outils de tests}
+    \begin{itemize}
+    \item Tests unitaires \textit{via} PyTest \footnote{\url{https://docs.pytest.org/en/7.1.x/}}
+    \item Tests d'acceptations \textit{via} Behave
+      (cucumber) \footnote{\url{https://behave.readthedocs.io/en/stable/}}
+    \end{itemize}    
+  \end{block}
+\end{frame}
+
+\subsection{Style et conventions}
+\begin{frame}{Style et conventions}
+  \begin{block}{PEP 8}
+    \begin{itemize}
+    \item Vérification de la conformité du programme avec PEP 8
+      \textit{via}
+      Flake8\footnote{\url{https://flake8.pycqa.org/en/latest/}}
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Google et OpenStack}
+    \begin{itemize}
+    \item Google Python Style Guide \footnote{\url{https://google.github.io/styleguide/pyguide.html}}
+    \item OpenStack Style
+      Guidelines \footnote{\url{https://docs.openstack.org/hacking/latest/user/hacking.html}}
+    \item Utilisation de l'extension
+      hacking\footnote{\url{https://pypi.org/project/hacking/}} de
+      Flake8
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Bibliothèques Python}
+\begin{frame}{Bibliothèques Python}
+  \begin{block}{Bibliothèques}
+    \begin{itemize}
+    \item Style et conventions
+      \begin{itemize}
+      \item Flake8
+      \item Flake8-html
+      \item Hacking      
+      \end{itemize}
+
+    \item Tests
+      \begin{itemize}
+      \item PyTest
+      \item Behave
+      \end{itemize}
+
+    \item Base de données
+      \begin{itemize}
+      \item TinyDB
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}

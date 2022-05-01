@@ -1,0 +1,1 @@
+from .chessclub import ChessClub

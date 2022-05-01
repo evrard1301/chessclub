@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu title="Menu principal">
+
+  <menu title="Configurer un tournoi" action="t">
+    <menu-entry action="m" title="Menu principal"/>
+  </menu>
+
+  <menu title="Jouer un tournoi" action="j">
+    <menu-entry action="m" title="Menu principal"/>
+  </menu>
+
+  <menu title="Éditer le classement" action="e">
+    <menu-entry action="m" title="Menu principal"/>
+  </menu>
+
+  <menu title="Générer un rapport" action="r">
+    <menu-entry action="m" title="Menu principal"/>
+  </menu>
+
+  <entry action="q">quit</entry>
+  
+</menu>

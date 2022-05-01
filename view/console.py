@@ -1,4 +1,16 @@
-from .menu import Menu
+from .menu import Menu, MenuInput
+
+
+class ConsoleMenuInput(MenuInput):
+    def ask(self):
+        if self._default is None:
+            default = ''
+        else:
+            default = f'({self._default})'
+        res = input(self._text + default + ': ')
+        if res.strip() == '':
+            return default
+        return res
 
 
 class ConsoleMenu(Menu):

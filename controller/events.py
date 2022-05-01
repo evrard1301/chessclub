@@ -8,7 +8,7 @@ class Event:
 
     def name(self):
         return self._name
-    
+
     def get(self, value_name):
         return self._values[value_name]
 

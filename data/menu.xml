@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <menu title='Menu Principal'>
+  <entry action='j'>Nouveau joueur</entry>
+  <ask action='j'>Nom de famille</ask>
+  <ask action='j'>Prénom</ask>
+  <ask action='j'>Date de naissance</ask>
+  <ask action='j'>Genre</ask>
+  <ask action='j'>Rang</ask>
+  <ask action='j' default='O'>Sauvegarder ?</ask>
   <entry action='q'>Quit</entry>
 </menu>

@@ -1,5 +1,5 @@
 import pytest
-from .menu import Menu, MenuSession, MenuError
+from .menu import Menu, MenuSession, MenuError, MenuInput
 
 
 def test_nav():
@@ -33,3 +33,24 @@ def test_wrong_action():
 
     with pytest.raises(MenuError):
         session.nav('p')
+
+
+def test_input():
+    test_input.called = False
+
+    class MenuInputMock(MenuInput):
+        def ask(self):
+            test_input.called = True
+            return 'toto'
+
+    menu = Menu('my menu')
+    menu.add_input('a', MenuInputMock('coucou'))
+    menu.add('hola', 'a')
+    menu.add('mec', 'b')
+    session = MenuSession(menu)
+    session.nav('b')
+    assert session[0] is None
+    assert test_input.called is False
+    session.nav('a')
+    assert test_input.called is True
+    assert 'toto' == session[0]

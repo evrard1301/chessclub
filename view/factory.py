@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from .builder import ConsoleMenuBuilder
 
+
 class XMLFactory:
     def __init__(self):
         pass
@@ -26,7 +27,14 @@ class XMLFactory:
                 builder.entry(menu.text, menu['action'])
             if menu.name == 'link':
                 builder.link(menu.text, menu['action'])
-        
+            if menu.name == 'ask':
+                default = None
+                if 'default' in menu.attrs.keys():
+                    default = menu['default']
+                builder.ask(menu['action'],
+                            menu.text,
+                            default)
+
         parse_menu(builder, parser.menu)
 
         return builder.build()

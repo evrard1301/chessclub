@@ -1,3 +1,7 @@
+from abc import ABC, abstractmethod
+from controller.events import Event, EventSource
+
+
 class Menu:
     """Composite structure representing an abstract menu."""
     def __init__(self, title):
@@ -19,10 +23,15 @@ class Menu:
             raise MenuError(f'no menu with action "{action}"')
         return self._nexts[action]
 
-
-class MenuSession:
+    @abstractmethod
+    def show(self):
+        """Expose the menu to the user."""
+        pass
+    
+class MenuSession(EventSource):
     """Represent a stateful menu navigation."""
     def __init__(self, menu):
+        super().__init__()
         self._menu = menu
 
     def menu(self):
@@ -32,6 +41,9 @@ class MenuSession:
         next_menu = self._menu.get_menu_by_action(action)
         if not isinstance(next_menu, str) and next_menu.is_submenu():
             self._menu = next_menu
+            self.notify(Event('goto', menu=next_menu))
+        else:
+            self.notify(Event('activate', action=action, entry=next_menu))
 
 
 class MenuError(Exception):

@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<menu title='Main menu'>
-  <menu title='Secondary menu' action='j'>
-    <link action='m'>Main menu</link>
-    <entry action='f'>First</entry>
-    <entry action='s'>Second</entry>
-  </menu>
+<menu title='Menu Principal'>
   <entry action='q'>Quit</entry>
 </menu>

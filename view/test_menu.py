@@ -44,7 +44,7 @@ def test_input():
             return 'toto'
 
     menu = Menu('my menu')
-    menu.add_input('a', MenuInputMock('coucou'))
+    menu.add_input('a', MenuInputMock('coucou', 'txt'))
     menu.add('hola', 'a')
     menu.add('mec', 'b')
     session = MenuSession(menu)

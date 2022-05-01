@@ -5,7 +5,14 @@ class ChessClub:
     """Chess club main class"""
     def __init__(self, data_store):
         self._data_store = data_store
+        self._running = False
 
+    def run(self):
+        self._running = True
+
+    def is_running(self):
+        return self._running
+    
     def new_player(self,
                    last_name,
                    first_name,
@@ -19,6 +26,6 @@ class ChessClub:
             date_of_birth,
             gender,
             ranking))
-
+        
     def quit(self):
-        exit(0)
+        self._running = False

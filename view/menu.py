@@ -3,7 +3,8 @@ from controller.events import Event, EventSource
 
 
 class MenuInput(ABC):
-    def __init__(self, text, default=None):
+    def __init__(self, user_input, text, default=None):
+        self._user_input = user_input
         self._text = text
         self._default = default
 

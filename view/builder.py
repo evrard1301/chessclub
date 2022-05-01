@@ -3,7 +3,8 @@ from .console import ConsoleMenu, ConsoleMenuInput
 
 
 class MenuBuilder:
-    def __init__(self):
+    def __init__(self, user_input):
+        self._user_input = user_input
         self._menus = []
 
     def build(self):
@@ -27,7 +28,10 @@ class MenuBuilder:
         return self
 
     def ask(self, action, text, default):
-        self._menus[-1][1].add_input(action, MenuInput(text, default))
+        self._menus[-1][1].add_input(action,
+                                     MenuInput(self._user_input,
+                                               text,
+                                               default))
         return self
 
     def link(self, menu_title, action):
@@ -42,13 +46,16 @@ class MenuBuilder:
 
 
 class ConsoleMenuBuilder(MenuBuilder):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, user_input):
+        super().__init__(user_input)
 
     def begin_menu(self, title, action):
         self._menus.append((action, ConsoleMenu(title)))
         return self
-
+    
     def ask(self, action, text, default):
-        self._menus[-1][1].add_input(action, ConsoleMenuInput(text, default))
+        self._menus[-1][1].add_input(action,
+                                     ConsoleMenuInput(self._user_input,
+                                               text,
+                                               default))
         return self

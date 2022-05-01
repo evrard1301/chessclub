@@ -2,12 +2,15 @@ from .menu import Menu, MenuInput
 
 
 class ConsoleMenuInput(MenuInput):
+    def __init__(self, user_input, text, default=None):
+        super().__init__(user_input, text, default)
+
     def ask(self):
         if self._default is None:
             default = ''
         else:
             default = f'({self._default})'
-        res = input(self._text + default + ': ')
+        res = self._user_input.ask(self._text + default + ': ')
         if res.strip() == '':
             return default
         return res

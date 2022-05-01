@@ -1,6 +1,5 @@
 class ChessClub:
-    """Model facade aimed at interact with the controller."""
-
+    """Chess club main class"""
     def __init__(self):
         pass
 

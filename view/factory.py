@@ -24,15 +24,15 @@ class XMLFactory:
                     parse_menu(builder, child)
                 builder.end()
             if menu.name == 'entry':
-                builder.entry(menu.text, menu['action'])
+                builder.entry(menu.text.strip(), menu['action'])
             if menu.name == 'link':
-                builder.link(menu.text, menu['action'])
+                builder.link(menu.text.strip(), menu['action'])
             if menu.name == 'ask':
                 default = None
                 if 'default' in menu.attrs.keys():
                     default = menu['default']
                 builder.ask(menu['action'],
-                            menu.text,
+                            menu.text.strip(),
                             default)
 
         parse_menu(builder, parser.menu)

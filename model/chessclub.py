@@ -29,3 +29,4 @@ class ChessClub:
 
     def quit(self):
         self._running = False
+        print('Au revoir !')

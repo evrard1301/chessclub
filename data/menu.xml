@@ -8,5 +8,27 @@
   <ask action='j'>Genre</ask>
   <ask action='j'>Rang</ask>
   <ask action='j' default='O'>Sauvegarder ?</ask>
+
+  <menu title="Nouveau tournoi" action="t">
+    <ask action="i">Nom</ask>
+    <ask action="i">Lieu</ask>
+    <ask action="i">Date</ask>
+    <ask action="i" default="4">Nombre de tours</ask>
+    <ask action="i" default="bullet">Paramètre temps (bullet/blits/rapide)</ask>
+    <ask action="i">Description</ask>
+    <entry action="i">Saisir informations</entry>
+
+    <ask action="j"> saisir nom de famille OU
+      saisir prénom OU
+      saisir ID
+    </ask>
+    <entry action="j">Ajouter un joueur</entry>
+
+    <ask action="r">Instance ronde</ask>
+    <entry action="r">Ajouter une instance ronde</entry>
+
+    <link action="q">Menu Principal</entry>
+  </menu>
+  
   <entry action='q'>Quit</entry>
 </menu>

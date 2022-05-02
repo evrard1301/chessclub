@@ -1,10 +1,10 @@
-from view.factory import XMLFactory
-from view.userinput import ConsoleUserInput
-from model.chessclub import ChessClub
-from model.datastore import DataStore
 from controller.approuter import AppRouter
 from controller.approuter import PrintErrorManager
 from controller.controllers import MainController
+from model.chessclub import ChessClub
+from model.datastore import DataStore
+from view.factory import XMLFactory
+from view.userinput import ConsoleUserInput
 
 if __name__ == '__main__':
     user_input = ConsoleUserInput()
@@ -15,4 +15,9 @@ if __name__ == '__main__':
     router = AppRouter(user_input, model, view)
     router.set_error_manager(PrintErrorManager(user_input))
     router.set_controller(MainController())
-    router.run()
+
+    try:
+        router.run()
+    except KeyboardInterrupt:
+        print()
+        model.quit()

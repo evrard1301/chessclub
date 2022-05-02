@@ -1,4 +1,5 @@
 from .player import Player
+from .tournament import Tournament
 
 
 class ChessClub:
@@ -20,12 +21,31 @@ class ChessClub:
                    gender,
                    ranking):
         """Create a new player and store it inside the data store"""
-        self._data_store.store_player(Player(
+        p = Player(
             last_name,
             first_name,
             date_of_birth,
             gender,
-            ranking))
+            ranking)
+        self._data_store.store_player(p)
+        return p
+
+    def new_tournament(self,
+                       name,
+                       place,
+                       date,
+                       category,
+                       description):
+        tournament = Tournament(name,
+                                place,
+                                date,
+                                category,
+                                description)
+        self._data_store.store_tournament(tournament)
+        return tournament
+
+    def get_all_players(self):
+        return self._data_store.players()
 
     def quit(self):
         self._running = False

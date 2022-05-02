@@ -2,21 +2,23 @@ from .menu import Menu
 from .menu import MenuError
 from .menu import MenuInput
 from .menu import MenuSession
+from .userinteractor import ConsoleUserInteractor
 import pytest
 
 
 def test_nav():
-    menu_0 = Menu('First Menu')
-    menu_1 = Menu('Second Menu')
+    user_interactor = ConsoleUserInteractor()
+    menu_0 = Menu('First Menu', user_interactor)
+    menu_1 = Menu('Second Menu', user_interactor)
 
-    menu_1.add(Menu('First'), 'd')
-    menu_1.add(Menu('Second'), 'e')
-    menu_1.add(Menu('Last'), 'f')
+    menu_1.add(Menu('First', user_interactor), 'd')
+    menu_1.add(Menu('Second', user_interactor), 'e')
+    menu_1.add(Menu('Last', user_interactor), 'f')
     menu_1.add(menu_0, 'p')
 
-    menu_0.add(Menu('First'), 'a')
-    menu_0.add(Menu('Second'), 'b')
-    menu_0.add(Menu('Last'), 'c')
+    menu_0.add(Menu('First', user_interactor), 'a')
+    menu_0.add(Menu('Second', user_interactor), 'b')
+    menu_0.add(Menu('Last', user_interactor), 'c')
     menu_0.add(menu_1, 'n')
 
     session = MenuSession(menu_0)
@@ -30,8 +32,9 @@ def test_nav():
 
 
 def test_wrong_action():
-    menu = Menu('First')
-    menu.add(Menu('Option'), 'o')
+    user_interactor = ConsoleUserInteractor()
+    menu = Menu('First', user_interactor)
+    menu.add(Menu('Option', user_interactor), 'o')
     session = MenuSession(menu)
 
     with pytest.raises(MenuError):
@@ -45,8 +48,8 @@ def test_input():
         def ask(self):
             test_input.called = True
             return 'toto'
-
-    menu = Menu('my menu')
+    user_interactor = ConsoleUserInteractor()
+    menu = Menu('my menu', user_interactor)
     menu.add_input('a', MenuInputMock('coucou', 'txt'))
     menu.add('hola', 'a')
     menu.add('mec', 'b')

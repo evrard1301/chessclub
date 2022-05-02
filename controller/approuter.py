@@ -4,8 +4,8 @@ from view.menu import MenuSession
 
 
 class AppErrorManager(ABC):
-    def __init__(self, user_input):
-        self._user_input = user_input
+    def __init__(self, user_interactor):
+        self._user_interactor = user_interactor
 
     @abstractmethod
     def on_error(self, err):
@@ -23,13 +23,13 @@ class PrintErrorManager(AppErrorManager):
 
 
 class AppRouter:
-    def __init__(self, user_input, model, view):
-        self._user_input = user_input
+    def __init__(self, user_interactor, model, view):
+        self._user_interactor = user_interactor
         self._model = model
         self._view = view
         self._session = MenuSession(self._view)
         self._controller = None
-        self._error_manager = RaiseErrorManager(self._user_input)
+        self._error_manager = RaiseErrorManager(self._user_interactor)
 
     def set_error_manager(self, error_manager):
         self._error_manager = error_manager
@@ -46,7 +46,7 @@ class AppRouter:
         while self._model.is_running():
             try:
                 self._session.menu().show()
-                self._session.nav(self._user_input.ask('> '))
+                self._session.nav(self._user_interactor.ask('> '))
             except Exception as err:
                 self._error_manager.on_error(err)
 

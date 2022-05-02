@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 
 
 class XMLFactory:
-    def __init__(self, user_input):
-        self._user_input = user_input
+    def __init__(self, user_interactor):
+        self._user_interactor = user_interactor
 
     def load_from_file(self, filename):
         data = ''
@@ -12,7 +12,7 @@ class XMLFactory:
             data = file.read()
 
         parser = BeautifulSoup(data, 'xml')
-        builder = ConsoleMenuBuilder(self._user_input)
+        builder = ConsoleMenuBuilder(self._user_interactor)
 
         def parse_menu(builder, menu):
             if menu.name == 'menu':

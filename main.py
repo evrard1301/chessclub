@@ -4,16 +4,16 @@ from controller.controllers import MainController
 from model.chessclub import ChessClub
 from model.datastore import DataStore
 from view.factory import XMLFactory
-from view.userinput import ConsoleUserInput
+from view.userinteractor import ConsoleUserInteractor
 
 if __name__ == '__main__':
-    user_input = ConsoleUserInput()
-    factory = XMLFactory(user_input)
+    user_interactor = ConsoleUserInteractor()
+    factory = XMLFactory(user_interactor)
     view = factory.load_from_file('data/menu.xml')
     datastore = DataStore()
     model = ChessClub(datastore)
-    router = AppRouter(user_input, model, view)
-    router.set_error_manager(PrintErrorManager(user_input))
+    router = AppRouter(user_interactor, model, view)
+    router.set_error_manager(PrintErrorManager(user_interactor))
     router.set_controller(MainController())
 
     try:

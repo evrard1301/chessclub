@@ -5,8 +5,8 @@ from .menu import MenuInput
 
 
 class MenuBuilder:
-    def __init__(self, user_input):
-        self._user_input = user_input
+    def __init__(self, user_interactor):
+        self._user_interactor = user_interactor
         self._menus = []
 
     def build(self):
@@ -15,7 +15,8 @@ class MenuBuilder:
         return menu
 
     def begin_menu(self, title, action):
-        self._menus.append((action, Menu(title)))
+        self._menus.append((action, Menu(title,
+                                         self._user_interactor)))
         return self
 
     def end(self):
@@ -31,7 +32,7 @@ class MenuBuilder:
 
     def ask(self, action, text, default):
         self._menus[-1][1].add_input(action,
-                                     MenuInput(self._user_input,
+                                     MenuInput(self._user_interactor,
                                                text,
                                                default))
         return self
@@ -48,16 +49,17 @@ class MenuBuilder:
 
 
 class ConsoleMenuBuilder(MenuBuilder):
-    def __init__(self, user_input):
-        super().__init__(user_input)
+    def __init__(self, user_interactor):
+        super().__init__(user_interactor)
 
     def begin_menu(self, title, action):
-        self._menus.append((action, ConsoleMenu(title)))
+        self._menus.append((action, ConsoleMenu(title,
+                                                self._user_interactor)))
         return self
 
     def ask(self, action, text, default):
         self._menus[-1][1].add_input(action,
-                                     ConsoleMenuInput(self._user_input,
+                                     ConsoleMenuInput(self._user_interactor,
                                                       text,
                                                       default))
         return self

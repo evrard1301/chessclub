@@ -5,10 +5,13 @@ from controller.events import EventSource
 
 
 class MenuInput(ABC):
-    def __init__(self, user_input, text, default=None):
-        self._user_input = user_input
+    def __init__(self, user_interactor, text, default=None):
+        self._user_interactor = user_interactor
         self._text = text
         self._default = default
+
+    def text(self):
+        return self._text
 
     @abstractmethod
     def ask(self):
@@ -17,8 +20,9 @@ class MenuInput(ABC):
 
 class Menu:
     """Composite structure representing an abstract menu."""
-    def __init__(self, title):
+    def __init__(self, title, user_interactor):
         self._title = title
+        self._user_interactor = user_interactor
         self._inputs = {}
         self._nexts = {}
 
@@ -47,6 +51,9 @@ class Menu:
         """Expose the menu to the user."""
         pass
 
+    def io(self):
+        return self._user_interactor
+
 
 class MenuSession(EventSource):
     """Represent a stateful menu navigation."""
@@ -69,7 +76,7 @@ class MenuSession(EventSource):
 
         if not isinstance(next_menu, str) and next_menu.is_submenu():
             self._menu = next_menu
-            self.notify(Event('goto', menu=next_menu))
+            self.notify(Event('goto', action=action, menu=next_menu))
         else:
             self.notify(Event('activate', action=action, entry=next_menu))
 

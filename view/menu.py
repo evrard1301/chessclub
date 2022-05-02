@@ -1,5 +1,7 @@
-from abc import ABC, abstractmethod
-from controller.events import Event, EventSource
+from abc import ABC
+from abc import abstractmethod
+from controller.events import Event
+from controller.events import EventSource
 
 
 class MenuInput(ABC):

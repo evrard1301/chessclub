@@ -1,4 +1,5 @@
-from .menu import Menu, MenuInput
+from .menu import Menu
+from .menu import MenuInput
 
 
 class ConsoleMenuInput(MenuInput):

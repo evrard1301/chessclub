@@ -1,5 +1,8 @@
+from .menu import Menu
+from .menu import MenuError
+from .menu import MenuInput
+from .menu import MenuSession
 import pytest
-from .menu import Menu, MenuSession, MenuError, MenuInput
 
 
 def test_nav():

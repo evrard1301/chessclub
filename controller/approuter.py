@@ -15,7 +15,7 @@ class AppRouter:
         self._controller = ctrl
         self._controller.prepare(self, self._model, self._view)
         self._session.add_listener(ctrl)
-        
+
     def run(self):
         self._model.run()
         while self._model.is_running():

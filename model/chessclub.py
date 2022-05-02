@@ -12,7 +12,7 @@ class ChessClub:
 
     def is_running(self):
         return self._running
-    
+
     def new_player(self,
                    last_name,
                    first_name,
@@ -26,6 +26,6 @@ class ChessClub:
             date_of_birth,
             gender,
             ranking))
-        
+
     def quit(self):
         self._running = False

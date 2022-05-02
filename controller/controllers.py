@@ -1,4 +1,5 @@
 from .events import EventListener
+import re
 
 
 class Controller(EventListener):
@@ -13,6 +14,10 @@ class Controller(EventListener):
         self._router = router
         self._model = model
         self._view = view
+
+
+class MainControllerError(Exception):
+    pass
 
 
 class MainController(Controller):
@@ -31,6 +36,12 @@ class MainController(Controller):
     def on_new_player(self, event):
         if len(self._player_info) < event.get('count') - 1:
             self._player_info.append(event.get('response'))
+            if event.get("index") == 3:
+                if not re.match('[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,2}',
+                                event.get('response')):
+                    raise MainControllerError('invalid date of birth')
+            if self._player_info[-1].strip() == '':
+                raise MainControllerError()
         elif event.get('response').lower() == 'o':
             self._model.new_player(self._player_info[0],
                                    self._player_info[1],

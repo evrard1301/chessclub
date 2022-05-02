@@ -1,5 +1,7 @@
-from .menu import Menu, MenuInput
-from .console import ConsoleMenu, ConsoleMenuInput
+from .console import ConsoleMenu
+from .console import ConsoleMenuInput
+from .menu import Menu
+from .menu import MenuInput
 
 
 class MenuBuilder:
@@ -52,10 +54,10 @@ class ConsoleMenuBuilder(MenuBuilder):
     def begin_menu(self, title, action):
         self._menus.append((action, ConsoleMenu(title)))
         return self
-    
+
     def ask(self, action, text, default):
         self._menus[-1][1].add_input(action,
                                      ConsoleMenuInput(self._user_input,
-                                               text,
-                                               default))
+                                                      text,
+                                                      default))
         return self

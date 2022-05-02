@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup
 from .builder import ConsoleMenuBuilder
+from bs4 import BeautifulSoup
 
 
 class XMLFactory:

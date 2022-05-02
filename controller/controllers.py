@@ -39,9 +39,15 @@ class MainController(Controller):
             if event.get("index") == 3:
                 if not re.match('[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,2}',
                                 event.get('response')):
-                    raise MainControllerError('invalid date of birth')
+                    raise MainControllerError('la date de naissance '
+                                              'doit être au format '
+                                              'jj/mm/aaaa')
+            if event.get("index") == 5:
+                if not re.match('[0-9]+',
+                                event.get('response')):
+                    raise MainControllerError('le rang doit être un nombre')
             if self._player_info[-1].strip() == '':
-                raise MainControllerError()
+                raise MainControllerError('champs invalide')
         elif event.get('response').lower() == 'o':
             self._model.new_player(self._player_info[0],
                                    self._player_info[1],

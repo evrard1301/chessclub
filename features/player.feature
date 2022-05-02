@@ -86,3 +86,13 @@ Feature: I can create a player
 		   When I set the gender to be "M"
 		   When I set the ranking to be " "
 		   Then an error is raised
+		   
+	Scenario: create a player with non-digit ranking
+	 	   Given a new session
+		   When I select "j"
+		   When I set the last name to be "Boben"
+		   When I set the first name to be "Ludivic"
+		   When I set the date of birth to be "13/01/1995"
+		   When I set the gender to be "M"
+		   When I set the ranking to be "aze"
+		   Then an error is raised

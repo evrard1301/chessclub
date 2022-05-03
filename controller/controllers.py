@@ -104,13 +104,7 @@ class MainController(Controller):
                 raise MainControllerError('Le tournoi doit accueillir'
                                           ' huit joueurs')
 
-            t = self._model.new_tournament(self._tournament_info[0],
-                                           self._tournament_info[1],
-                                           self._tournament_info[2],
-                                           self._tournament_info[3],
-                                           self._tournament_info[4])
-            t.add_players(self._tournament_players)
-
+            rounds = []
             for i in range(0, len(self._tournament_rounds), 2):
                 start_parts = self._tournament_rounds[i].split('/')
                 end_parts = self._tournament_rounds[i+1].split('/')
@@ -121,11 +115,32 @@ class MainController(Controller):
                            int(end_parts[1]),
                            int(end_parts[0]))
 
-                if start > end:
-                    raise MainControllerError('la date de début du tour'
-                                              'doit être antérieur '
-                                              'à la date de fin')
-                t.add_round(Round(f'Round {int(i/2)+1}', start, end))
+                rounds.append(Round(f'Round {int(i/2)+1}', start, end))
+
+            for i in range(0, len(rounds)):
+                r0 = rounds[i]
+                for j in range(i + 1, len(rounds)):
+                    r1 = rounds[j]
+                    if r0.during_round(r1.start) or r0.during_round(r1.end):
+                        raise MainControllerError(f'{r1.name} ne devrait pas '
+                                                  'se dérouler '
+                                                  f'pendant {r0.name}')
+
+            t = self._model.new_tournament(self._tournament_info[0],
+                                           self._tournament_info[1],
+                                           self._tournament_info[2],
+                                           self._tournament_info[3],
+                                           self._tournament_info[4])
+
+            t.add_players(self._tournament_players)
+
+            if start > end:
+                raise MainControllerError('la date de début du tour'
+                                          'doit être antérieur '
+                                          'à la date de fin')
+
+            for r in rounds:
+                t.add_round(r)
 
             self._view.io().tell('Le tournoi a bien été crée')
             self.reset()

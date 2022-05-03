@@ -15,6 +15,10 @@ class Tournament:
         self._players = []
         self._rounds = []
 
+    @property
+    def rounds(self):
+        return self._rounds
+
     def add_round(self, round):
         self._rounds.append(round)
 

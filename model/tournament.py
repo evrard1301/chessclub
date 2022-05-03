@@ -1,8 +1,15 @@
 class Tournament:
-    def __init__(self, name, place, date, category, description):
+    def __init__(self,
+                 name,
+                 place,
+                 start_date,
+                 end_date,
+                 category,
+                 description):
         self._name = name
         self._place = place
-        self._date = date
+        self._start_date = start_date
+        self._end_date = end_date
         self._category = category
         self._description = description
         self._players = []

@@ -3,7 +3,6 @@ from model.chessclub import ChessClub
 from model.datastore import DataStore
 from view.factory import XMLFactory
 from view.userinteractor import UserInteractor
-from view.menu import MenuError
 from controller.approuter import AppRouter
 from controller.controllers import MainController, MainControllerError
 
@@ -91,7 +90,8 @@ def step_impl(ctx):
     player = ctx.data_store.player()
     assert player.last_name == ctx.lastname
     assert player.first_name == ctx.firstname
-    assert player.date_of_birth == ctx.date
+    assert player.date_of_birth.strftime('%d/%m/%y') == ctx.date \
+        or player.date_of_birth.strftime('%d/%m/%Y') == ctx.date
     assert player.gender == ctx.gender
     assert player.ranking == ctx.ranking
 

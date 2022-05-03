@@ -13,7 +13,7 @@
     <ask action="i">Nom</ask>
     <ask action="i">Lieu</ask>
     <ask action="i">Date</ask>
-    <ask action="i" default="bullet">Paramètre temps (bullet/blits/rapide)</ask>
+    <ask action="i" default="bullet">Paramètre temps (bullet/blitz/rapide)</ask>
     <ask action="i">Description</ask>
     <entry action="i">Saisir informations</entry>
     <entry action="v">Voir informations</entry>

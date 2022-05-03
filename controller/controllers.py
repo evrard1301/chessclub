@@ -1,4 +1,5 @@
 from .events import EventListener
+from datetime import date
 from model.round import Round
 import re
 
@@ -25,13 +26,13 @@ class MainController(Controller):
     def __init__(self):
         super().__init__()
         self.reset()
+        self._menu = None
 
     def reset(self):
         self._player_info = []
         self._tournament_info = []
         self._tournament_players = []
         self._tournament_rounds = []
-        self._menu = None
 
     def on_event(self, event):
         if event.name() == 'activate' and event.get('action') == 'q':
@@ -62,9 +63,12 @@ class MainController(Controller):
             if self._player_info[-1].strip() == '':
                 raise MainControllerError('champs invalide')
         elif event.get('response').lower() == 'o':
+            date_of_birth_parts = self._player_info[2].split('/')
             self._model.new_player(self._player_info[0],
                                    self._player_info[1],
-                                   self._player_info[2],
+                                   date(int(date_of_birth_parts[2]),
+                                        int(date_of_birth_parts[1]),
+                                        int(date_of_birth_parts[0])),
                                    self._player_info[3],
                                    self._player_info[4])
             self._player_info.clear()
@@ -73,20 +77,60 @@ class MainController(Controller):
 
     def on_new_tournament(self, event):
         all_players = self._model.get_all_players()
+        self.tournament_create(event, all_players)
+        self.tournament_show_players(event, all_players)
+        self.tournament_show_results(event, all_players)
+        self.tournament_update_info(event, all_players)
 
+    def tournament_create(self, event, all_players):
         if event.get('action') == 't':
+            if not re.match('bullet|blitz|rapide',
+                            self._tournament_info[3].lower()):
+                raise MainControllerError('La catégorie "'
+                                          + self._tournament_info[3]
+                                          + '" est invalide')
+            for i in range(0, len(self._tournament_players)):
+                for j in range(i + 1, len(self._tournament_players)):
+                    if self._tournament_players[i] \
+                       == self._tournament_players[j]:
+                        raise MainControllerError('Le joueur ',
+                                                  self._tournament_players[i],
+                                                  'apparait deux fois '
+                                                  'dans le tournoi')
+            if len(self._tournament_rounds) == 0:
+                raise MainControllerError('Le tournoi doit posséder'
+                                          ' au moins un tour')
+            if len(self._tournament_players) != 8:
+                raise MainControllerError('Le tournoi doit accueillir'
+                                          ' huit joueurs')
+
             t = self._model.new_tournament(self._tournament_info[0],
                                            self._tournament_info[1],
                                            self._tournament_info[2],
                                            self._tournament_info[3],
                                            self._tournament_info[4])
             t.add_players(self._tournament_players)
-            for i in range(0, len(self._tournament_rounds), 2):
-                t.add_round(Round(f'Round {int(i/2)+1}',
-                                  self._tournament_rounds[i],
-                                  self._tournament_rounds[i+1]))
 
+            for i in range(0, len(self._tournament_rounds), 2):
+                start_parts = self._tournament_rounds[i].split('/')
+                end_parts = self._tournament_rounds[i+1].split('/')
+                start = date(int(start_parts[2]),
+                             int(start_parts[1]),
+                             int(start_parts[0]))
+                end = date(int(end_parts[2]),
+                           int(end_parts[1]),
+                           int(end_parts[0]))
+
+                if start > end:
+                    raise MainControllerError('la date de début du tour'
+                                              'doit être antérieur '
+                                              'à la date de fin')
+                t.add_round(Round(f'Round {int(i/2)+1}', start, end))
+
+            self._view.io().tell('Le tournoi a bien été crée')
             self.reset()
+
+    def tournament_show_players(self, event, all_players):
         if event.get('action') == 'l':
             index = 0
             self._view.io().tell('ID | Prénom | Nom')
@@ -98,6 +142,7 @@ class MainController(Controller):
                     f'{player.last_name} ')
                 index += 1
 
+    def tournament_show_results(self, event, all_players):
         if event.get('action') == 'v':
             self._view.io().tell('Résumé')
             self._view.io().tell('-------- Informations --------')
@@ -113,6 +158,8 @@ class MainController(Controller):
                 print(f'Tour {int(i/2)}: du'
                       f' {self._tournament_rounds[i]} au'
                       f' {self._tournament_rounds[i+1]}')
+
+    def tournament_update_info(self, event, all_players):
         if event.name() == 'ask':
             if event.get('question').text() == 'ID du joueur':
                 player = all_players[int(event.get('response'))]

@@ -39,6 +39,7 @@ class ChessClub:
         tournament = Tournament(name,
                                 place,
                                 date,
+                                date,
                                 category,
                                 description)
         self._data_store.store_tournament(tournament)

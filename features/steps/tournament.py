@@ -12,7 +12,7 @@ class MyUserInteractor(UserInteractor):
         self._responses = []
         self.history = []
         self._told = []
-        
+
     def ask(self, msg):
         if len(self._responses) == 0:
             m = msg
@@ -47,7 +47,7 @@ def step_impl(ctx):
     router.set_controller(MainController())
     ctx.starts = []
     ctx.ends = []
-    
+
     model.new_player('Kazparov', 'Garry', '12/08/1995', 'M', '0')
     model.new_player('Carlsen', 'Magnus', '12/08/1995', 'M', '1')
     model.new_player('Fischer', 'Bobby', '12/08/1995', 'M', '2')
@@ -66,7 +66,7 @@ def step_impl(ctx):
         ctx.io.add_response(name)
         ctx.name = name
 
-        
+
     @when('I enter place "{place}"')
     def step_impl(ctx, place):
         ctx.io.add_response(place)
@@ -100,7 +100,7 @@ def step_impl(ctx):
         ctx.io.add_response(str(end))
         ctx.starts.append(start)
         ctx.ends.append(end)
-        
+
     @then('the tournament is successfully created')
     def step_impl(ctx):
         ctx.router.run()
@@ -108,7 +108,7 @@ def step_impl(ctx):
         tournament = ctx.data._tournaments[-1]
         assert ctx.name == tournament._name
         assert ctx.place == tournament._place
-        assert ctx.date == tournament._date
+        assert ctx.date == tournament._start_date
         assert ctx.category == tournament._category
         assert ctx.description == tournament._description
         assert 8 == len(tournament._players)
@@ -123,5 +123,21 @@ def step_impl(ctx):
 
         for i in range(0, len(tournament._rounds)):
             assert f'Round {i+1}' == tournament._rounds[i]._name
-            assert ctx.starts[i] == tournament._rounds[i]._start
-            assert ctx.ends[i] == tournament._rounds[i]._end
+            assert ctx.starts[i] == tournament._rounds[i]._start.strftime('%d/%m/%y') \
+                or ctx.starts[i] == tournament._rounds[i]._start.strftime('%d/%m/%Y')
+            assert ctx.ends[i] == tournament._rounds[i]._end.strftime('%d/%m/%y') \
+                or ctx.ends[i] == tournament._rounds[i]._end.strftime('%d/%m/%Y')
+
+    @then('the tournament creation failed')
+    def step_impl(ctx):
+        try:
+            ctx.router.run()
+            assert False
+        except Exception:
+            assert 0 == len(ctx.data._tournaments)
+                
+    @then('{n} tournaments has been created')
+    def step_impl(ctx, n):
+        ctx.router.run()
+        assert int(n) == len(ctx.data._tournaments)
+                

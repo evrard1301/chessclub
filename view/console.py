@@ -13,7 +13,7 @@ class ConsoleMenuInput(MenuInput):
             default = f'({self._default})'
         res = self._user_interactor.ask(self._text + default + ': ')
         if res.strip() == '':
-            return default
+            return default[1:-1]
         return res
 
 

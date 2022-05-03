@@ -17,4 +17,4 @@ class Round:
         return self._end
 
     def during_round(self, a_date):
-        return a_date >= self._start and a_date <= self._end
+        return a_date > self._start and a_date < self._end

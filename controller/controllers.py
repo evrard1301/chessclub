@@ -25,14 +25,7 @@ class MainControllerError(Exception):
 class MainController(Controller):
     def __init__(self):
         super().__init__()
-        self.reset()
-        self._menu = None
-
-    def reset(self):
         self._player_info = []
-        self._tournament_info = []
-        self._tournament_players = []
-        self._tournament_rounds = []
 
     def on_event(self, event):
         if event.name() == 'activate' and event.get('action') == 'q':
@@ -41,11 +34,12 @@ class MainController(Controller):
         if event.name() == 'ask':
             if event.get('action') == 'j':
                 self.on_new_player(event)
-        if event.name() == 'goto':
-            self._menu = event.get('menu')
+            if event.get('action') == 'q':
+                self._model.quit()
 
-        elif self._menu is not None and self._menu.title == 'Nouveau tournoi':
-            self.on_new_tournament(event)
+        if event.name() == 'goto' and event.get('action') == 't':
+            next_ctrl = SetupController()
+            self._router.set_controller(next_ctrl)
 
     def on_new_player(self, event):
         if len(self._player_info) < event.get('count') - 1:
@@ -74,6 +68,24 @@ class MainController(Controller):
             self._player_info.clear()
         else:
             self._player_info.clear()
+
+
+class SetupController(Controller):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self._menu = None
+
+    def reset(self):
+        self._tournament_info = []
+        self._tournament_players = []
+        self._tournament_rounds = []
+
+    def on_event(self, event):
+        if event.name() == 'goto' and event.get('action') == 'q':
+            self._router.set_controller(MainController())
+
+        self.on_new_tournament(event)
 
     def on_new_tournament(self, event):
         all_players = self._model.get_all_players()

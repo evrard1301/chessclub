@@ -81,4 +81,4 @@ class Tournament:
         return score
 
     def is_first_round(self):
-        return self._current_round is None
+        return self._current_round == 0

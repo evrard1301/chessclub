@@ -27,10 +27,10 @@ Feature: I can play a tournament
 		   When I enter "q"
 		   Then player Kazparov score is 1.5
 		   Then player Carlsen score is 0.5
-		   Then player Fischer score is 1.5
+		   Then player Fischer score is 0.5
 		   Then player Capablanca score is 2.5
-		   Then player Karpov score is 0.5
-		   Then player Botvinnik score is 2.0
-		   Then player Kramnik score is 2.5
+		   Then player Karpov score is 1.5
+		   Then player Botvinnik score is 2.5
+		   Then player Kramnik score is 2.0
 		   Then player Lasker score is 1.0
 		   

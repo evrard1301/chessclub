@@ -258,7 +258,6 @@ class PlayController(Controller):
                     results.append(MatchResult.DRAW)
 
             tournament.play_round(pairs, results)
-            self._show_scores(tournament)
 
         self._view.io().tell('Fin du tournoi !')
         self._view.io().tell('Voici les scores des joueurs')

@@ -10,3 +10,7 @@ class Player:
         self.date_of_birth = date_of_birth
         self.gender = gender
         self.ranking = ranking
+
+    def same_as(self, player):
+        return player.last_name == self.last_name \
+            and player.first_name == self.first_name

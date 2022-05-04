@@ -1,5 +1,8 @@
 from .events import EventListener
+from copy import deepcopy
 from datetime import date
+from model.match import MatchResult
+from model.pairgenerator import SwissPairGenerator
 from model.round import Round
 import re
 
@@ -39,6 +42,10 @@ class MainController(Controller):
 
         if event.name() == 'goto' and event.get('action') == 't':
             next_ctrl = SetupController()
+            self._router.set_controller(next_ctrl)
+
+        if event.name() == 'goto' and event.get('action') == 'J':
+            next_ctrl = PlayController()
             self._router.set_controller(next_ctrl)
 
     def on_new_player(self, event):
@@ -202,3 +209,65 @@ class SetupController(Controller):
                 if event.get('index') == 1:
                     self._tournament_info.clear()
                 self._tournament_info.append(event.get('response'))
+
+
+class PlayController(Controller):
+    def __init__(self):
+        super().__init__()
+        self._responses = []
+
+    def on_event(self, event):
+        if event.name() == 'ask':
+            self._responses.append(event.get('response'))
+
+        if event.get('action') == 'q':
+            self._router.set_controller(MainController())
+        elif event.get('action') == 'l':
+            id = 0
+            self._view.io().tell('ID | Nom')
+            self._view.io().tell('--------')
+            for tournament in self._model.get_all_tournaments():
+                self._view.io().tell(str(id) + ' ' + tournament.name)
+                id += 1
+        elif event.get('action') == 'j':
+            if len(self._responses) == 2 \
+               and self._responses[1].lower() == 'o':
+                self.play()
+
+    def play(self):
+        tournament = self._model.get_all_tournaments()[int(self._responses[0])]
+        gen = SwissPairGenerator()
+
+        while tournament.is_finished() is False:
+            self._view.io().tell('\n\n-------- '
+                                 f'{tournament.current_round().name} --------')
+            pairs = gen.generate(tournament)
+            results = []
+            for pair in pairs:
+                self._view.io().tell(f'\nMatch: {pair[0].name} '
+                                     f'contre {pair[1].name}')
+                res = self._view.io().ask('Résultat du match '
+                                          f'(0: {pair[0].name}, '
+                                          f'1: {pair[1].name}, '
+                                          '2: match nul): ')
+                if res == "0":
+                    results.append(MatchResult.WON)
+                elif res == "1":
+                    results.append(MatchResult.LOSE)
+                else:
+                    results.append(MatchResult.DRAW)
+
+            tournament.play_round(pairs, results)
+            self._show_scores(tournament)
+
+        self._view.io().tell('Fin du tournoi !')
+        self._view.io().tell('Voici les scores des joueurs')
+
+        self._show_scores(tournament)
+
+    def _show_scores(self, tournament):
+        players = deepcopy(self._model.get_all_players())
+        players.sort(reverse=True, key=lambda p: tournament.player_score(p))
+        for player in players:
+            self._view.io().tell(f'{tournament.player_score(player)}\t'
+                                 f'{player.name}')

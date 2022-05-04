@@ -28,6 +28,17 @@
     <entry action="t">Créer</entry>
     <link action="q">Menu Principal</entry>
   </menu>
+
+  <menu title="Jouer un tournoi" action="J">
+    <entry action="l">Afficher la liste des tournois</entry>
+
+    <entry action="c">Choisir un tournoi</entry>
+    <ask action="c">ID du tournoi</ask>
+    <ask action="c" default="N">Jouer ce tournoi ?</ask>
+    
+    <entry action="j">Jouer</entry>
+    <link action="q">Menu Principal</entry>
+  </menu>
   
   <entry action='q'>Quit</entry>
 </menu>

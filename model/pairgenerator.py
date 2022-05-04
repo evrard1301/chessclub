@@ -47,10 +47,11 @@ class SwissPairGenerator(PairGenerator):
             if first is True:
                 first = False
                 my_round = tournament.previous_round()
-                matches = my_round.find_matches_by_players(players[p0],
-                                                           players[p1])
-                if len(matches) > 0:
-                    p1 += 1
+                if my_round is not None:
+                    matches = my_round.find_matches_by_players(players[p0],
+                                                               players[p1])
+                    if len(matches) > 0:
+                        p1 += 1
 
             result.append((players[p0], players[p1]))
 

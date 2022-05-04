@@ -11,6 +11,10 @@ class Player:
         self.gender = gender
         self.ranking = ranking
 
+    @property
+    def name(self):
+        return self.first_name + ' ' + self.last_name
+
     def same_as(self, player):
         return player.last_name == self.last_name \
             and player.first_name == self.first_name

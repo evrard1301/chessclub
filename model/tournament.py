@@ -17,10 +17,16 @@ class Tournament:
         self._description = description
         self._players = []
         self._rounds = []
-        self._current_round = None
+        self._current_round = 0
 
     def is_finished(self):
+        if self._current_round is None:
+            return True
         return self._current_round >= len(self._rounds)
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def players(self):

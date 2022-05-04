@@ -57,10 +57,6 @@ def step_impl(ctx):
     model.new_player('Kramnik', 'Vladimir', '12/08/1995', 'M', '6')
     model.new_player('Lasker', 'Emanuel', '12/08/1995', 'M', '7')
 
-    @when('I enter "{action}"')
-    def step_impl(ctx, action):
-        ctx.io.add_response(action)
-
     @when('I enter name "{name}"')
     def step_impl(ctx, name):
         ctx.io.add_response(name)

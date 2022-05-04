@@ -48,6 +48,9 @@ class ChessClub:
     def get_all_players(self):
         return self._data_store.players()
 
+    def get_all_tournaments(self):
+        return self._data_store.tournaments()
+
     def quit(self):
         self._running = False
         print('Au revoir !')

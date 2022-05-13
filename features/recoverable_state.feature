@@ -4,12 +4,14 @@ Feature: the state of the program is not cleaned when
 	 Scenario: stop a playing tournament
 	 	   Given a tournament
 		   When I enter sequence "J,c,0,o,j"
-		   # Round 0
+		   # Round 1
 		   When I enter sequence "0,1,2"
 		   When I enter "\quitter"
 		   When I enter sequence "J,c,0,o,j"
-		   # Round 0 end + Round 2
-		   When I enter sequence "1,2,2,1,0"
+		   # Round 1 end
+		   When I enter sequence "1"
+		   # Round 2
+		   When I enter sequence "2,2,1,0"
 		   # Round 3
 		   When I enter sequence "2,2,1,0"
 		   When I enter sequence "q,q"

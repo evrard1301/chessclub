@@ -2,9 +2,9 @@ from .events import EventListener
 from copy import deepcopy
 from datetime import date
 from model.match import MatchResult
-from model.tournament import Tournament
 from model.pairgenerator import SwissPairGenerator
 from model.round import Round
+from model.tournament import Tournament
 import re
 
 
@@ -274,7 +274,7 @@ class PlayController(Controller):
             pairs = gen.generate(tournament)
             results = []
             start_index = 0
-            
+
             if self._last_state is not None:
                 pairs = self._last_state.pairs
                 start_index = self._last_state.index
@@ -301,7 +301,7 @@ class PlayController(Controller):
 
             tournament.play_round(pairs, results)
             self._last_state = None
-            
+
         self._view.io().tell('Fin du tournoi !')
         self._view.io().tell('Voici les scores des joueurs')
 

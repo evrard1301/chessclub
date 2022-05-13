@@ -7,6 +7,10 @@ from model.round import Round
 import re
 
 
+class StopAndSave(Exception):
+    pass
+
+
 class Controller(EventListener):
     def __init__(self):
         super().__init__()
@@ -29,56 +33,55 @@ class MainController(Controller):
     def __init__(self):
         super().__init__()
         self._player_info = []
+        self._play_ctrl = PlayController(self)
 
     def on_event(self, event):
-        if event.name() == 'activate' and event.get('action') == 'q':
+        if event.get('action') == 'j':
+            self.on_new_player(event)
+
+        if event.get('action') == 'q':
             self._model.quit()
 
-        if event.name() == 'ask':
-            if event.get('action') == 'j':
-                self.on_new_player(event)
-            if event.get('action') == 'q':
-                self._model.quit()
-
-        if event.name() == 'goto' and event.get('action') == 't':
+        if event.get('action') == 't':
             next_ctrl = SetupController()
             self._router.set_controller(next_ctrl)
 
-        if event.name() == 'goto' and event.get('action') == 'J':
-            next_ctrl = PlayController()
-            self._router.set_controller(next_ctrl)
+        if event.get('action') == 'J':
+            self._router.set_controller(self._play_ctrl)
 
-        if event.name() == 'goto' and event.get('action') == 'c':
+        if event.get('action') == 'c':
             next_ctrl = EditRankingController()
             self._router.set_controller(next_ctrl)
 
     def on_new_player(self, event):
-        if len(self._player_info) < event.get('count') - 1:
-            self._player_info.append(event.get('response'))
-            if event.get("index") == 3:
-                if not re.match('[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,2}',
-                                event.get('response')):
-                    raise MainControllerError('la date de naissance '
-                                              'doit être au format '
-                                              'jj/mm/aaaa')
-            if event.get("index") == 5:
-                if not re.match('[0-9]+',
-                                event.get('response')):
-                    raise MainControllerError('le rang doit être un nombre')
-            if self._player_info[-1].strip() == '':
-                raise MainControllerError('champs invalide')
-        elif event.get('response').lower() == 'o':
-            date_of_birth_parts = self._player_info[2].split('/')
-            self._model.new_player(self._player_info[0],
-                                   self._player_info[1],
+        last_name = self._view.io().ask("Nom de famille: ")
+        first_name = self._view.io().ask("Prénom: ")
+        date_of_birth = self._view.io().ask("Date de naissance: ")
+        date_of_birth_parts = date_of_birth.split('/')
+        if not re.match('[0-9]{1,2}/[0-9]{1,2}/[0-9]{1,2}',
+                        date_of_birth):
+            raise MainControllerError('la date de naissance '
+                                      'doit être au format '
+                                      'jj/mm/aaaa')
+
+        gender = self._view.io().ask("Genre: ")
+        if gender.strip(' ') != gender:
+            raise MainControllerError('le genre doit avoir une valeur')
+
+        ranking = self._view.io().ask("Rang: ")
+        if not re.match('[0-9]+', ranking):
+            raise MainControllerError('le rang doit être un nombre')
+
+        save = self._view.io().ask("Sauvegarder ? (O/n) ")
+
+        if save.lower() == 'o':
+            self._model.new_player(last_name,
+                                   first_name,
                                    date(int(date_of_birth_parts[2]),
                                         int(date_of_birth_parts[1]),
                                         int(date_of_birth_parts[0])),
-                                   self._player_info[3],
-                                   self._player_info[4])
-            self._player_info.clear()
-        else:
-            self._player_info.clear()
+                                   gender,
+                                   ranking)
 
 
 class SetupController(Controller):
@@ -216,9 +219,10 @@ class SetupController(Controller):
 
 
 class PlayController(Controller):
-    def __init__(self):
+    def __init__(self, main_ctrl):
         super().__init__()
         self._responses = []
+        self._main_ctrl = main_ctrl
 
     def on_event(self, event):
         if event.name() == 'ask':
@@ -236,7 +240,11 @@ class PlayController(Controller):
         elif event.get('action') == 'j':
             if len(self._responses) == 2 \
                and self._responses[1].lower() == 'o':
-                self.play()
+                try:
+                    self.play()
+                except StopAndSave:
+                    self._router.reset_session()
+                    self._router.set_controller(self._main_ctrl)
 
     def play(self):
         tournament = self._model.get_all_tournaments()[int(self._responses[0])]
@@ -254,7 +262,9 @@ class PlayController(Controller):
                                           f'(0: {pair[0].name}, '
                                           f'1: {pair[1].name}, '
                                           '2: match nul): ')
-                if res == "0":
+                if res == '\\quitter':
+                    raise StopAndSave()
+                elif res == "0":
                     results.append(MatchResult.WON)
                 elif res == "1":
                     results.append(MatchResult.LOSE)

@@ -41,6 +41,10 @@ class AppRouter:
         self._controller.prepare(self, self._model, self._view)
         self._session.add_listener(ctrl)
 
+    def reset_session(self):
+        self._session = MenuSession(self._view)
+        self._session.add_listener(self._controller())
+
     def run(self):
         self._model.run()
         while self._model.is_running():

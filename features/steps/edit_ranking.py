@@ -1,7 +1,7 @@
 from behave import given, when, then
 
 
-@when('I enter pattern "{pattern}"')
+@when('I enter sequence "{pattern}"')
 def step_impl(ctx, pattern):
     for entry in pattern.split(','):
         ctx.io.add_response(entry)

@@ -2,12 +2,6 @@
 
 <menu title='Menu Principal'>
   <entry action='j'>Nouveau joueur</entry>
-  <ask action='j'>Nom de famille</ask>
-  <ask action='j'>Prénom</ask>
-  <ask action='j'>Date de naissance</ask>
-  <ask action='j'>Genre</ask>
-  <ask action='j'>Rang</ask>
-  <ask action='j' default='O'>Sauvegarder ?</ask>
 
   <menu title="Nouveau tournoi" action="t">
     <ask action="i">Nom</ask>

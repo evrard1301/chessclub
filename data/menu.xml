@@ -4,20 +4,12 @@
   <entry action='j'>Nouveau joueur</entry>
 
   <menu title="Nouveau tournoi" action="t">
-    <ask action="i">Nom</ask>
-    <ask action="i">Lieu</ask>
-    <ask action="i">Date</ask>
-    <ask action="i" default="bullet">Paramètre temps (bullet/blitz/rapide)</ask>
-    <ask action="i">Description</ask>
     <entry action="i">Saisir informations</entry>
     <entry action="v">Voir informations</entry>
 
-    <ask action="j"> ID du joueur</ask>
     <entry action="j">Ajouter un joueur</entry>
     <entry action="l">Liste des joueurs</entry>
 
-    <ask action="r">Date de début</ask>
-    <ask action="r">Date de fin</ask>
     <entry action="r">Ajouter un tour</entry>
     <entry action="t">Créer</entry>
     <link action="q">Menu Principal</entry>

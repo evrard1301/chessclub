@@ -104,6 +104,7 @@ def step_impl(ctx):
         tournament = ctx.data._tournaments[-1]
         assert ctx.name == tournament._name
         assert ctx.place == tournament._place
+        print(f'--> assert {ctx.date} == {tournament._start_date}')
         assert ctx.date == tournament._start_date
         assert ctx.category == tournament._category
         assert ctx.description == tournament._description

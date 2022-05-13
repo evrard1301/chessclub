@@ -48,6 +48,10 @@ class ChessClub:
         self._data_store.store_tournament(tournament)
         return tournament
 
+    def add_tournament(self, tournament):
+        self._data_store.store_tournament(tournament)
+        return tournament
+
     def get_all_players(self):
         return self._data_store.players()
 

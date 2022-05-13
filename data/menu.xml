@@ -19,8 +19,8 @@
     <entry action="l">Afficher la liste des tournois</entry>
 
     <entry action="c">Choisir un tournoi</entry>
-    <ask action="c">ID du tournoi</ask>
-    <ask action="c" default="N">Jouer ce tournoi ?</ask>
+    <!--<ask action="c">ID du tournoi</ask>
+    <ask action="c" default="N">Jouer ce tournoi ?</ask>-->
     
     <entry action="j">Jouer</entry>
     <link action="q">Menu Principal</entry>

@@ -14,14 +14,10 @@ Feature: the state of the program is not cleaned when
 		   When I enter sequence "2,2,1,0"
 		   When I enter sequence "q,q"
 		   Then player Kazparov score is 2.0
-
-
-
-
-		   #Then player Carlsen score is 1.5
-		   #Then player Fischer score is 1.0
-		   #Then player Capablanca score is 2
-		   #Then player Karpov score is 1.5
-		   #Then player Botvinnik score is 2.0
-		   #Then player Kramnik score is 1.5
-		   #Then player Lasker score is 2.0
+		   Then player Carlsen score is 1.5
+		   Then player Fischer score is 1.0
+		   Then player Capablanca score is 2
+		   Then player Karpov score is 0
+		   Then player Botvinnik score is 2.0
+		   Then player Kramnik score is 1.5
+		   Then player Lasker score is 2.0

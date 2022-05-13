@@ -30,6 +30,9 @@ class ChessClub:
         self._data_store.store_player(p)
         return p
 
+    def change_player_ranking(self, player, ranking):
+        self._data_store.find_players_by_name(player.name).ranking = ranking
+
     def new_tournament(self,
                        name,
                        place,

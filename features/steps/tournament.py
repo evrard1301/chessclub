@@ -48,14 +48,14 @@ def step_impl(ctx):
     ctx.starts = []
     ctx.ends = []
 
-    model.new_player('Kazparov', 'Garry', '12/08/1995', 'M', '0')
-    model.new_player('Carlsen', 'Magnus', '12/08/1995', 'M', '1')
-    model.new_player('Fischer', 'Bobby', '12/08/1995', 'M', '2')
-    model.new_player('Capablanca', 'Jose Raul', '12/08/1995', 'M', '3')
-    model.new_player('Karpov', 'Anatoly', '12/08/1995', 'M', '4')
-    model.new_player('Botvinnik', 'Mikhail', '12/08/1995', 'M', '5')
-    model.new_player('Kramnik', 'Vladimir', '12/08/1995', 'M', '6')
-    model.new_player('Lasker', 'Emanuel', '12/08/1995', 'M', '7')
+    model.new_player('Kazparov', 'Garry', '12/08/1995', 'M', '1')
+    model.new_player('Carlsen', 'Magnus', '12/08/1995', 'M', '2')
+    model.new_player('Fischer', 'Bobby', '12/08/1995', 'M', '3')
+    model.new_player('Capablanca', 'Jose Raul', '12/08/1995', 'M', '4')
+    model.new_player('Karpov', 'Anatoly', '12/08/1995', 'M', '5')
+    model.new_player('Botvinnik', 'Mikhail', '12/08/1995', 'M', '6')
+    model.new_player('Kramnik', 'Vladimir', '12/08/1995', 'M', '7')
+    model.new_player('Lasker', 'Emanuel', '12/08/1995', 'M', '8')
 
     @when('I enter name "{name}"')
     def step_impl(ctx, name):

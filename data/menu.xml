@@ -39,6 +39,12 @@
     <entry action="j">Jouer</entry>
     <link action="q">Menu Principal</entry>
   </menu>
+
+  <menu title="Éditer le classement" action="c">
+    <entry action="v">Voir classement actuel</entry>
+    <entry action="m">Mettre à jour le classement</entry>
+    <link action="q">Menu Principal</entry>
+  </menu>
   
   <entry action='q'>Quit</entry>
 </menu>

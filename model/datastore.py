@@ -17,3 +17,6 @@ class DataStore:
 
     def find_players_by_ranking(self, ranking):
         return [p for p in self._players if int(p.ranking) == int(ranking)]
+
+    def find_players_by_name(self, name):
+        return [p for p in self._players if p.name == name][0]

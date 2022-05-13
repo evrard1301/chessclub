@@ -48,6 +48,10 @@ class MainController(Controller):
             next_ctrl = PlayController()
             self._router.set_controller(next_ctrl)
 
+        if event.name() == 'goto' and event.get('action') == 'c':
+            next_ctrl = EditRankingController()
+            self._router.set_controller(next_ctrl)
+
     def on_new_player(self, event):
         if len(self._player_info) < event.get('count') - 1:
             self._player_info.append(event.get('response'))
@@ -270,3 +274,33 @@ class PlayController(Controller):
         for player in players:
             self._view.io().tell(f'{tournament.player_score(player)}\t'
                                  f'{player.name}')
+
+
+class EditRankingController(Controller):
+    def __init__(self):
+        super().__init__()
+        self._menu = None
+
+    def on_event(self, event):
+        players = sorted(self._model.get_all_players(),
+                         key=lambda p: p.ranking)
+
+        if event.get('action') == 'q':
+            self._router.set_controller(MainController())
+
+        elif event.get('action') == 'v':
+            self._show_ranking(players)
+
+        elif event.get('action') == 'm':
+            self._change_ranking(players)
+
+    def _show_ranking(self, players):
+        self._view.io().tell('RANG -> NOM')
+        self._view.io().tell('-----------')
+        for player in players:
+            self._view.io().tell(f'{player.ranking} -> {player.name}')
+
+    def _change_ranking(self, players):
+        for player in players:
+            ranking = self._view.io().ask(f'Rang pour {player.name}: ')
+            self._model.change_player_ranking(player, ranking)

@@ -1,3 +1,4 @@
+
 from .events import EventListener
 from copy import deepcopy
 from datetime import date
@@ -6,10 +7,7 @@ from model.pairgenerator import SwissPairGenerator
 from model.round import Round
 from model.tournament import Tournament
 import re
-
-
-class StopAndSave(Exception):
-    pass
+from view.menu import StopAndSave
 
 
 class Controller(EventListener):
@@ -35,6 +33,7 @@ class MainController(Controller):
         super().__init__()
         self._player_info = []
         self._play_ctrl = PlayController(self)
+        self._setup_ctrl = SetupController(self)
 
     def on_event(self, event):
         if event.get('action') == 'j':
@@ -44,8 +43,7 @@ class MainController(Controller):
             self._model.quit()
 
         if event.get('action') == 't':
-            next_ctrl = SetupController()
-            self._router.set_controller(next_ctrl)
+            self._router.set_controller(self._setup_ctrl)
 
         if event.get('action') == 'J':
             self._router.set_controller(self._play_ctrl)
@@ -86,8 +84,9 @@ class MainController(Controller):
 
 
 class SetupController(Controller):
-    def __init__(self):
+    def __init__(self, main_ctrl):
         super().__init__()
+        self._main_ctrl = main_ctrl
         self._tournament = Tournament(
             '',
             '',
@@ -98,39 +97,48 @@ class SetupController(Controller):
         )
 
     def on_event(self, event):
-        if event.get('action') == 'q':
-            self._router.set_controller(MainController())
+        try:
+            if event.get('action') == 'q':
+                self._router.set_controller(self._main_ctrl)
 
-        if event.get('action') == 'i':
-            self._ask_informations()
+            if event.get('action') == 'i':
+                self._ask_informations()
 
-        if event.get('action') == 'v':
-            self._view_informations()
+            if event.get('action') == 'v':
+                self._view_informations()
 
-        if event.get('action') == 'j':
-            self._add_player()
+            if event.get('action') == 'j':
+                self._add_player()
 
-        if event.get('action') == 'l':
-            self._list_players()
+            if event.get('action') == 'l':
+                self._list_players()
 
-        if event.get('action') == 'r':
-            self._add_round()
+            if event.get('action') == 'r':
+                self._add_round()
 
-        if event.get('action') == 't':
-            self._create()
+            if event.get('action') == 't':
+                self._create()
+        except StopAndSave:
+            print('STOP')
+
+    def _input(self, msg):
+        value = self._view.io().ask(msg)
+        if value == '\\quitter':
+            raise StopAndSave()
+        return value
 
     def _ask_informations(self):
-        name = self._view.io().ask('Nom: ')
+        name = self._input('Nom: ')
         self._tournament._name = name
 
-        place = self._view.io().ask('Lieu: ')
+        place = self._input('Lieu: ')
         self._tournament._place = place
-        the_date = self._view.io().ask('Date: ')
+        the_date = self._input('Date: ')
         self._tournament._start_date = the_date
         self._tournament._end_date = the_date
 
-        time_setting = self._view.io().ask('Paramètre temps (BULLET'
-                                           '/blitz/rapide)')
+        time_setting = self._input('Paramètre temps (BULLET'
+                                   '/blitz/rapide)')
         if not re.match('bullet|blitz|rapide',
                         time_setting.lower()):
             raise MainControllerError('La catégorie "'
@@ -138,12 +146,17 @@ class SetupController(Controller):
                                       + '" est invalide')
         self._tournament._category = time_setting
 
-        description = self._view.io().ask('Description: ')
+        description = self._input('Description: ')
         self._tournament._description = description
 
     def _view_informations(self):
         self._view.io().tell('Résumé')
         self._view.io().tell('-------- Informations --------')
+        self._view.io().tell(f'Nom: {self._tournament._name}')
+        self._view.io().tell(f'Lieu: {self._tournament._place}')
+        self._view.io().tell(f'Date: {self._tournament._start_date}')
+        self._view.io().tell(f'Paramètre: {self._tournament._category}')
+        self._view.io().tell(f'Description: {self._tournament._description}')
 
         self._view.io().tell('-------- Joueurs --------')
 
@@ -158,7 +171,7 @@ class SetupController(Controller):
                   f' {self._tournament_rounds[i+1]}')
 
     def _add_player(self):
-        player_id = int(self._view.io().ask('ID du joueur: '))
+        player_id = int(self._input('ID du joueur: '))
         player = self._model.get_all_players()[player_id]
         self._tournament.add_player(player)
         self._view.io().tell(f'{player.name} a été ajouté au tournoi')
@@ -168,13 +181,13 @@ class SetupController(Controller):
             self._view.io().tell('Player {i}: {player.name}')
 
     def _add_round(self):
-        start_date_str = self._view.io().ask('Date de début: ')
+        start_date_str = self._input('Date de début: ')
         start_date_split = start_date_str.split('/')
         start_date = date(int(start_date_split[2]),
                           int(start_date_split[1]),
                           int(start_date_split[0]))
 
-        end_date_str = self._view.io().ask('Date de fin: ')
+        end_date_str = self._input('Date de fin: ')
         end_date_split = end_date_str.split('/')
         end_date = date(int(end_date_split[2]),
                         int(end_date_split[1]),

@@ -1,7 +1,7 @@
 Feature: the state of the program is not cleaned when
 	 an action is canceled
 
-	 Scenario: stop a playing tournament
+	 Scenario: I can interrupt and continue a played tournament
 	 	   Given a tournament
 		   When I enter sequence "J,c,0,o,j"
 		   # Round 1
@@ -23,3 +23,21 @@ Feature: the state of the program is not cleaned when
 		   Then player Botvinnik score is 2.0
 		   Then player Kramnik score is 1.5
 		   Then player Lasker score is 2.0
+		   
+	Scenario: I can quit and continue a created tournament
+		  Given eight players
+		  When I enter sequence "t"
+		  # Give informations
+		  When I enter sequence "i,Hello,World,12/08/1995"
+		  When I enter sequence "blitz,description here"
+		  When I enter sequence "q,t"
+		  # Add players
+		  When I enter sequence "j,0,j,1,j,2,j,3,j,4"	  
+		  When I enter sequence "j,5,j,6,j,7"		  
+		  # Add a round
+  		  When I enter sequence "r,13/08/1998,14/08/1998"
+		  When I enter sequence "q,t"
+		  # create it
+		  When I enter sequence "t,q,q"
+		  Then 1 tournaments has been created
+

@@ -1,5 +1,6 @@
 from abc import ABC
 from abc import abstractmethod
+from view.menu import StopAndSave
 
 
 class UserInteractor(ABC):
@@ -14,6 +15,8 @@ class UserInteractor(ABC):
 
 class ConsoleUserInteractor(UserInteractor):
     def ask(self, msg):
+        if msg == '\\quitter':
+            raise StopAndSave()
         return input(msg)
 
     def tell(self, msg):

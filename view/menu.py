@@ -93,5 +93,9 @@ class MenuSession(EventSource):
                 i += 1
 
 
+class StopAndSave(Exception):
+    pass
+
+
 class MenuError(Exception):
     pass

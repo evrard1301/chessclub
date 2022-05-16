@@ -14,6 +14,12 @@ class ChessClub:
     def is_running(self):
         return self._running
 
+    def save(self):
+        self._data_store.save()
+
+    def load(self):
+        self._data_store.load()
+
     def new_player(self,
                    last_name,
                    first_name,

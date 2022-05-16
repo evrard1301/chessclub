@@ -11,6 +11,14 @@ class Match:
         self._result = None
 
     @property
+    def __dict__(self):
+        return {
+            'player_0': self._player_0.name,
+            'player_1': self._player_1.name,
+            'result': int(self._result)
+        }
+
+    @property
     def players(self):
         return (self._player_0, self._player_1)
 

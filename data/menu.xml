@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <menu title='Menu Principal'>
+  <entry action='S'>Sauvegarder</entry>
+  <entry action='C'>Charger</entry>
+  
   <entry action='j'>Nouveau joueur</entry>
 
   <menu title="Nouveau tournoi" action="t">
@@ -19,8 +22,6 @@
     <entry action="l">Afficher la liste des tournois</entry>
 
     <entry action="c">Choisir un tournoi</entry>
-    <!--<ask action="c">ID du tournoi</ask>
-    <ask action="c" default="N">Jouer ce tournoi ?</ask>-->
     
     <entry action="j">Jouer</entry>
     <link action="q">Menu Principal</entry>

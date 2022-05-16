@@ -36,6 +36,12 @@ class MainController(Controller):
         self._setup_ctrl = SetupController(self)
 
     def on_event(self, event):
+        if event.get('action') == 'S':
+            self.on_save()
+
+        if event.get('action') == 'C':
+            self.on_load()
+
         if event.get('action') == 'j':
             self.on_new_player(event)
 
@@ -82,6 +88,12 @@ class MainController(Controller):
                                    gender,
                                    ranking)
 
+    def on_save(self):
+        self._model.save()
+
+    def on_load(self):
+        self._model.load()
+
 
 class SetupController(Controller):
     def __init__(self, main_ctrl):
@@ -119,7 +131,7 @@ class SetupController(Controller):
             if event.get('action') == 't':
                 self._create()
         except StopAndSave:
-            print('STOP')
+            pass
 
     def _input(self, msg):
         value = self._view.io().ask(msg)
@@ -178,7 +190,7 @@ class SetupController(Controller):
 
     def _list_players(self):
         for i, player in enumerate(self._model.get_all_players()):
-            self._view.io().tell('Player {i}: {player.name}')
+            self._view.io().tell(f'Player {i}: {player.name}')
 
     def _add_round(self):
         start_date_str = self._input('Date de début: ')
@@ -292,9 +304,8 @@ class PlayController(Controller):
                 pairs = self._last_state.pairs
                 start_index = self._last_state.index
                 results = self._last_state.results
-            print('--> restart at ', start_index)
+
             for i in range(start_index, len(pairs)):
-                print('--> current =', i)
                 pair = pairs[i]
                 self._view.io().tell(f'\nMatch: {pair[0].name} '
                                      f'contre {pair[1].name}')

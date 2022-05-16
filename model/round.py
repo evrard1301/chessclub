@@ -9,6 +9,20 @@ class Round:
         self._matches = []
 
     @property
+    def __dict__(self):
+        result = {
+            'name': self._name,
+            'start': str(self._start),
+            'end': str(self._end),
+            'matches': []
+        }
+
+        for m in self._matches:
+            result['matches'].append(m.__dict__)
+
+        return result
+
+    @property
     def name(self):
         return self._name
 

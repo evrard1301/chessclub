@@ -10,3 +10,4 @@ __pycache__
 *.out
 *.snm
 *.toc
+db.json

@@ -3,7 +3,7 @@ from controller.approuter import PrintErrorManager
 from controller.controllers import MainController
 from datetime import date
 from model.chessclub import ChessClub
-from model.datastore import DataStore
+from model.datastore import TinyDBStore
 from model.player import Player
 from model.round import Round
 from view.factory import XMLFactory
@@ -52,9 +52,10 @@ if __name__ == '__main__':
     user_interactor = ConsoleUserInteractor()
     factory = XMLFactory(user_interactor)
     view = factory.load_from_file('data/menu.xml')
-    datastore = DataStore()
+    datastore = TinyDBStore()
     model = ChessClub(datastore)
-    example_tournament(model, datastore)
+    # Uncomment for manual testing
+    # example_tournament(model, datastore)
     router = AppRouter(user_interactor, model, view)
     router.set_error_manager(PrintErrorManager(user_interactor))
     router.set_controller(MainController())

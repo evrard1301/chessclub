@@ -19,6 +19,25 @@ class Tournament:
         self._rounds = []
         self._current_round = 0
 
+    @property
+    def __dict__(self):
+        result = {}
+        result['name'] = self._name
+        result['place'] = self._place
+        result['start_date'] = str(self._start_date)
+        result['end_date'] = str(self._end_date)
+        result['category'] = self._category
+        result['description'] = self._description
+        result['players'] = [p.name for p in self._players]
+
+        rounds = []
+        for r in self._rounds:
+            rounds.append(r.__dict__)
+        result['rounds'] = rounds
+        result['current_round'] = self._current_round
+
+        return result
+
     def is_finished(self):
         if self._current_round is None:
             return True

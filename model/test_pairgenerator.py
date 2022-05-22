@@ -1,5 +1,5 @@
 from datetime import date
-from model.datastore import DataStore
+from model.datastore import InMemoryStore
 from model.match import MatchResult
 from model.pairgenerator import SwissPairGenerator
 from model.player import Player
@@ -25,7 +25,7 @@ def setup():
                                date(2020, 3, 10),
                                date(2020, 3, 11)))
 
-    datastore = DataStore()
+    datastore = InMemoryStore()
     tournament.add_player(Player('Kazparov', 'Garry', '12/08/1995', 'M', '1'))
     datastore.store_player(tournament._players[-1])
     tournament.add_player(Player('Carlsen', 'Magnus', '12/08/1995', 'M', '2'))

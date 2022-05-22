@@ -1,6 +1,6 @@
 from behave import given, when, then
 from model.chessclub import ChessClub
-from model.datastore import DataStore
+from model.datastore import InMemoryStore
 from view.factory import XMLFactory
 from view.userinteractor import UserInteractor
 from controller.approuter import AppRouter
@@ -37,7 +37,7 @@ class MyUserInteractor(UserInteractor):
 def step_impl(ctx):
     user_interactor = MyUserInteractor()
     ctx.io = user_interactor
-    data_store = DataStore()
+    data_store = InMemoryStore()
     ctx.data = data_store
     model = ChessClub(data_store)
     factory = XMLFactory(user_interactor)

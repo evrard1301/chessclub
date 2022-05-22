@@ -1,3 +1,5 @@
+from abc import ABC
+from abc import abstractmethod
 import datetime
 from model.match import Match
 from model.player import Player
@@ -6,16 +8,48 @@ from model.tournament import Tournament
 import tinydb
 
 
-class DataStore:
+class DataStore(ABC):
+    def __init__(self):
+        self._players = []
+        self._tournaments = []
+
+    @abstractmethod
+    def save(self):
+        pass
+
+    @abstractmethod
+    def load(self):
+        pass
+
+    def store_player(self, player):
+        self._players.append(player)
+
+    def store_tournament(self, tournament):
+        self._tournaments.append(tournament)
+
+    def players(self):
+        return self._players
+
+    def tournaments(self):
+        return self._tournaments
+
+    def find_players_by_ranking(self, ranking):
+        return [p for p in self._players if int(p.ranking) == int(ranking)]
+
+    def find_players_by_name(self, name):
+        return [p for p in self._players if p.name == name][0]
+
+
+class InMemoryStore:
     def __init__(self):
         self._players = []
         self._tournaments = []
 
     def save(self):
-        raise NotImplementedError('cannot save')
+        pass
 
     def load(self):
-        raise NotImplementedError('cannot load')
+        pass
 
     def store_player(self, player):
         self._players.append(player)

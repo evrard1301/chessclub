@@ -1,13 +1,13 @@
 from behave import given, when, then
 from model.chessclub import ChessClub
-from model.datastore import DataStore
+from model.datastore import InMemoryStore
 from view.factory import XMLFactory
 from view.userinteractor import UserInteractor
 from controller.approuter import AppRouter
 from controller.controllers import MainController, MainControllerError
 
 
-class MyDataStore(DataStore):
+class MyInMemoryStore(InMemoryStore):
     def __init__(self):
         super().__init__()
         self._player = None
@@ -42,7 +42,7 @@ class MyUserInteractor(UserInteractor):
 def step_impl(ctx):
     ctx.user_interactor = MyUserInteractor()
     factory = XMLFactory(ctx.user_interactor)
-    ctx.data_store = MyDataStore()
+    ctx.data_store = MyInMemoryStore()
     model = ChessClub(ctx.data_store)
     view = factory.load_from_file("data/menu.xml")
 

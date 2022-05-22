@@ -33,25 +33,25 @@ class SwissPairGenerator(PairGenerator):
 
         return result
 
-    def _generate(self, tournament):
+    def _generate_from_scores(self, tournament, player_scores):
         players = copy.deepcopy(tournament.players)
         result = []
 
-        players.sort(reverse=True, key=lambda p: tournament.player_score(p))
-        first = True
+        players.sort(reverse=True, key=lambda p: player_scores[p.name])
 
         while len(players) > 0:
             p0 = 0
             p1 = 1
 
-            if first is True:
-                first = False
-                my_round = tournament.previous_round()
-                if my_round is not None:
-                    matches = my_round.find_matches_by_players(players[p0],
-                                                               players[p1])
+            my_round = tournament.previous_round()
+            if my_round is not None:
+                while True:
+                    matches = tournament.find_matches_by_players(players[p0],
+                                                                 players[p1])
                     if len(matches) > 0:
                         p1 += 1
+                    else:
+                        break
 
             result.append((players[p0], players[p1]))
 
@@ -59,3 +59,11 @@ class SwissPairGenerator(PairGenerator):
             del players[p1 - 1]
 
         return result
+
+    def _generate(self, tournament):
+        scores = {}
+
+        for player in tournament.players:
+            scores[player.name] = tournament.player_score(player)
+
+        return self._generate_from_scores(tournament, scores)

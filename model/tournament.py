@@ -101,3 +101,11 @@ class Tournament:
 
     def is_first_round(self):
         return self._current_round == 0
+
+    def find_matches_by_players(self, player_0, player_1):
+        matches = []
+
+        for myround in self._rounds:
+            matches += myround.find_matches_by_players(player_0, player_1)
+
+        return matches

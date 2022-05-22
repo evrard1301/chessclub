@@ -55,7 +55,7 @@ if __name__ == '__main__':
     datastore = TinyDBStore()
     model = ChessClub(datastore)
     # Uncomment for manual testing
-    # example_tournament(model, datastore)
+    example_tournament(model, datastore)
     router = AppRouter(user_interactor, model, view)
     router.set_error_manager(PrintErrorManager(user_interactor))
     router.set_controller(MainController())

@@ -131,3 +131,41 @@ def test_first_players_have_already_played_together():
     oracle = make_pairs(datastore, (1, 2), (5, 3), (4, 6), (7, 8))
     result = gen.generate(tournament)
     check_result(oracle, result)
+
+
+def test_first_player_have_already_played_against_snd_and_third():
+    gen = SwissPairGenerator()
+    tournament, datastore = setup()
+
+    tournament.play_round([
+        (tournament.players[0], tournament.players[1]),
+        (tournament.players[2], tournament.players[3]),
+        (tournament.players[4], tournament.players[5]),
+        (tournament.players[6], tournament.players[7])
+    ],
+                          [MatchResult.DRAW,
+                           MatchResult.DRAW,
+                           MatchResult.DRAW,
+                           MatchResult.DRAW])
+
+    tournament.play_round([
+        (tournament.players[0], tournament.players[2]),
+        (tournament.players[3], tournament.players[4]),
+        (tournament.players[5], tournament.players[6]),
+        (tournament.players[7], tournament.players[1])
+    ],
+                          [MatchResult.DRAW,
+                           MatchResult.DRAW,
+                           MatchResult.DRAW,
+                           MatchResult.DRAW])
+    for i, player in enumerate(tournament.players):
+        player.ranking = i + 1
+
+    def mock_player_score(player):
+        return 0
+
+    tournament.player_score = mock_player_score
+    initial = gen.generate(tournament)
+
+    assert initial[0][0].name == tournament.players[0].name
+    assert initial[0][1].name == tournament.players[3].name

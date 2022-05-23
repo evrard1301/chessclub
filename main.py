@@ -10,9 +10,9 @@ from view.factory import XMLFactory
 from view.userinteractor import ConsoleUserInteractor
 
 
-def example_tournament(model, datastore):
+def example_tournament(name, model, datastore):
 
-    tournament = model.new_tournament('THE tournament',
+    tournament = model.new_tournament(name,
                                       'ChessClub building',
                                       date(2020, 3, 7),
                                       'blitz',
@@ -54,8 +54,11 @@ if __name__ == '__main__':
     view = factory.load_from_file('data/menu.xml')
     datastore = TinyDBStore()
     model = ChessClub(datastore)
+
     # Uncomment for manual testing
-    example_tournament(model, datastore)
+    # example_tournament('First tournament', model, datastore)
+    # example_tournament('Second tournament', model, datastore)
+
     router = AppRouter(user_interactor, model, view)
     router.set_error_manager(PrintErrorManager(user_interactor))
     router.set_controller(MainController())

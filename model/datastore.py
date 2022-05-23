@@ -40,7 +40,7 @@ class DataStore(ABC):
         return [p for p in self._players if p.name == name][0]
 
 
-class InMemoryStore:
+class InMemoryStore(DataStore):
     def __init__(self):
         self._players = []
         self._tournaments = []

@@ -4,6 +4,12 @@
   <entry action='S'>Sauvegarder</entry>
   <entry action='C'>Charger</entry>
   
+  <menu title="Rapports" action="R">
+    <entry action='a'>Acteurs (par nom)</entry>
+    <entry action='A'>Acteurs (par classement)</entry>
+    <link action='q'>Menu Principal</link>
+  </menu>
+  
   <entry action='j'>Nouveau joueur</entry>
 
   <menu title="Nouveau tournoi" action="t">
@@ -17,7 +23,7 @@
     <entry action="t">Créer</entry>
     <link action="q">Menu Principal</entry>
   </menu>
-
+  
   <menu title="Jouer un tournoi" action="J">
     <entry action="l">Afficher la liste des tournois</entry>
 

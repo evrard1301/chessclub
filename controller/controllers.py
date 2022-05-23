@@ -34,6 +34,7 @@ class MainController(Controller):
         self._player_info = []
         self._play_ctrl = PlayController(self)
         self._setup_ctrl = SetupController(self)
+        self._report_ctrl = ReportController(self)
 
     def on_event(self, event):
         if event.get('action') == 'S':
@@ -41,6 +42,9 @@ class MainController(Controller):
 
         if event.get('action') == 'C':
             self.on_load()
+
+        if event.get('action') == 'R':
+            self._router.set_controller(self._report_ctrl)
 
         if event.get('action') == 'j':
             self.on_new_player(event)
@@ -367,3 +371,44 @@ class EditRankingController(Controller):
         for player in players:
             ranking = self._view.io().ask(f'Rang pour {player.name}: ')
             self._model.change_player_ranking(player, ranking)
+
+
+class ReportController(Controller):
+    def __init__(self, main_ctrl):
+        self._main_ctrl = main_ctrl
+
+    def on_event(self, event):
+        if event.get('action') == 'q':
+            self._router.set_controller(self._main_ctrl)
+        if event.get('action') == 'a':
+            self.report_actors_by_name()
+        if event.get('action') == 'A':
+            self.report_actors_by_ranking()
+
+    def report_actors_by_name(self):
+        actors_by_name = self._all_actors()
+        actors_by_name.sort(key=lambda p: p.last_name)
+        
+        self._view.io().tell('Prénom \t Nom')
+        self._view.io().tell('------------------------')
+        for a in actors_by_name:
+            self._view.io().tell(a.name)
+
+    def report_actors_by_ranking(self):
+        actors_by_ranking = self._all_actors()
+        actors_by_ranking.sort(key=lambda p: p.ranking)
+
+        self._view.io().tell('Classement' + '\t' + 'Nom')
+        self._view.io().tell('------------------------')
+        
+        for a in actors_by_ranking:
+            self._view.io().tell(a.ranking + '\t' + a.name)
+
+    def _all_actors(self):
+        tournaments = self._model.get_all_tournaments()
+        players = []
+        for tournament in tournaments:
+            for player in tournament.players:
+                if player.name not in [p.name for p in players]:
+                    players.append(player)
+        return players

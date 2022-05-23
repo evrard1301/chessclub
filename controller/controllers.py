@@ -384,23 +384,39 @@ class ReportController(Controller):
             self.report_actors_by_name()
         if event.get('action') == 'A':
             self.report_actors_by_ranking()
+        if event.get('action') == 't':
+            self.report_actors_by_name(self._ask_tournament())
+        if event.get('action') == 'T':
+            self.report_actors_by_ranking(self._ask_tournament())
 
-    def report_actors_by_name(self):
-        actors_by_name = self._all_actors()
+    def report_actors_by_name(self, tournament=None):
+        actors_by_name = None
+        if tournament is None:
+            actors_by_name = deepcopy(self._all_actors())
+        else:
+            actors_by_name = deepcopy(self._all_tournament_actors(tournament))
+
         actors_by_name.sort(key=lambda p: p.last_name)
-        
+
         self._view.io().tell('Prénom \t Nom')
         self._view.io().tell('------------------------')
         for a in actors_by_name:
             self._view.io().tell(a.name)
 
-    def report_actors_by_ranking(self):
-        actors_by_ranking = self._all_actors()
+    def report_actors_by_ranking(self, tournament=None):
+        actors_by_ranking = None
+        if tournament is None:
+            actors_by_ranking = deepcopy(self._all_actors())
+        else:
+            actors_by_ranking = deepcopy(self._all_tournament_actors(
+                tournament
+            ))
+
         actors_by_ranking.sort(key=lambda p: p.ranking)
 
         self._view.io().tell('Classement' + '\t' + 'Nom')
         self._view.io().tell('------------------------')
-        
+
         for a in actors_by_ranking:
             self._view.io().tell(a.ranking + '\t' + a.name)
 
@@ -412,3 +428,20 @@ class ReportController(Controller):
                 if player.name not in [p.name for p in players]:
                     players.append(player)
         return players
+
+    def _all_tournament_actors(self, tournament):
+        players = []
+        for player in tournament.players:
+            if player.name not in [p.name for p in players]:
+                players.append(player)
+        return players
+
+    def _ask_tournament(self):
+        for i, t in enumerate(self._model.get_all_tournaments()):
+            self._view.io().tell(f'{i} -> {t.name}')
+        
+        myid = int(self._view.io().ask('Quel tournoi '
+                                       'voulez-vous sélectionner ? '))
+        
+        return self._model.get_all_tournaments()[myid]
+        

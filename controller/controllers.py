@@ -412,7 +412,7 @@ class ReportController(Controller):
                 tournament
             ))
 
-        actors_by_ranking.sort(key=lambda p: p.ranking)
+        actors_by_ranking.sort(key=lambda p: int(p.ranking))
 
         self._view.io().tell('Classement' + '\t' + 'Nom')
         self._view.io().tell('------------------------')

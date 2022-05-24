@@ -182,9 +182,9 @@ class SetupController(Controller):
 
         self._view.io().tell('-------- Tours --------')
         for i in range(0, len(self._tournament.rounds), 2):
-            print(f'Tour {int(i/2)}: du'
-                  f' {self._tournament.rounds[i]} au'
-                  f' {self._tournament_rounds[i+1]}')
+            self._view.io().tell(f'Tour {int(i/2)}: du'
+                                 f' {self._tournament.rounds[i]} au'
+                                 f' {self._tournament_rounds[i+1]}')
 
     def _add_player(self):
         player_id = int(self._input('ID du joueur: '))
@@ -388,6 +388,45 @@ class ReportController(Controller):
             self.report_actors_by_name(self._ask_tournament())
         if event.get('action') == 'T':
             self.report_actors_by_ranking(self._ask_tournament())
+        if event.get('action') == 'l':
+            self.report_list_tournaments()
+        if event.get('action') == 'L':
+            self.report_list_rounds(self._ask_tournament())
+        if event.get('action') == 'm':
+            self.report_list_matches(self._ask_tournament())
+
+    def report_list_tournaments(self):
+        self._view.io().tell('-------- Tournois --------')
+        for tournament in self._model.get_all_tournaments():
+            self._view.io().tell(tournament.name)
+
+    def report_list_rounds(self, tournament):
+        self._view.io().tell('-------- Tours --------')
+        for myround in tournament.rounds:
+            self._view.io().tell(myround.name
+                                 + ' du '
+                                 + myround.start.strftime('%d/%m/%Y')
+                                 + ' au '
+                                 + myround.end.strftime('%d/%m/%Y'))
+
+    def report_list_matches(self, tournament):
+        self._view.io().tell('-------- Matches --------')
+        for myround in tournament.rounds:
+            self._view.io().tell(f'\n-------- Tour {myround.name}')
+            for match in myround._matches:
+                p0, p1 = match.players
+                if match.result == 2:
+                    self._view.io().tell(p0.name
+                                         + ' égalise avec '
+                                         + p1.name)
+                elif match.result == 0:
+                    self._view.io().tell(p0.name
+                                         + ' gagne contre '
+                                         + p1.name)
+                elif match.result == 1:
+                    self._view.io().tell(p0.name
+                                         + ' perd contre '
+                                         + p1.name)
 
     def report_actors_by_name(self, tournament=None):
         actors_by_name = None
@@ -439,9 +478,8 @@ class ReportController(Controller):
     def _ask_tournament(self):
         for i, t in enumerate(self._model.get_all_tournaments()):
             self._view.io().tell(f'{i} -> {t.name}')
-        
+
         myid = int(self._view.io().ask('Quel tournoi '
                                        'voulez-vous sélectionner ? '))
-        
+
         return self._model.get_all_tournaments()[myid]
-        

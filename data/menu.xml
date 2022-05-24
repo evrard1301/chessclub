@@ -9,6 +9,9 @@
     <entry action='A'>Acteurs (par classement)</entry>
     <entry action='t'>Tournoi (acteurs par nom)</entry>
     <entry action='T'>Tournoi (acteurs par classement)</entry>
+    <entry action='l'>Liste des tournois</entry>
+    <entry action='L'>Liste des tours</entry>
+    <entry action='m'>Liste des matchs</entry>
     <link action='q'>Menu Principal</link>
   </menu>
   

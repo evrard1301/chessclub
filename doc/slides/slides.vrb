@@ -1,0 +1,23 @@
+\frametitle{Chargement: les tours et les matchs}
+\footnotesize
+  \begin{minted}{python}
+    the_round = Round(r['name'],
+                      datetime.date(*[
+                          int(i)
+                          for i in r['start'].split('-')
+                      ]),
+                      datetime.date(*[
+                          int(i)
+                          for i in r['end'].split('-')
+                      ]))
+
+    for match in r['matches']:
+        m = Match(self.find_players_by_name(match['player_0']),
+                  self.find_players_by_name(match['player_1']))
+        m.set_result(int(match['result']))
+        the_round.add_match(m)
+
+    the_tournament.add_round(the_round)
+
+self._tournaments.append(the_tournament)
+  \end{minted}

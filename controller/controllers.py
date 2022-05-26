@@ -1,6 +1,6 @@
 
 from .events import EventListener
-from copy import deepcopy
+from copy import copy
 from datetime import date
 from model.match import MatchResult
 from model.pairgenerator import SwissPairGenerator
@@ -336,7 +336,7 @@ class PlayController(Controller):
         self._show_scores(tournament)
 
     def _show_scores(self, tournament):
-        players = deepcopy(self._model.get_all_players())
+        players = copy(self._model.get_all_players())
         players.sort(reverse=True, key=lambda p: tournament.player_score(p))
         for player in players:
             self._view.io().tell(f'{tournament.player_score(player)}\t'
@@ -431,9 +431,9 @@ class ReportController(Controller):
     def report_actors_by_name(self, tournament=None):
         actors_by_name = None
         if tournament is None:
-            actors_by_name = deepcopy(self._all_actors())
+            actors_by_name = copy(self._all_actors())
         else:
-            actors_by_name = deepcopy(self._all_tournament_actors(tournament))
+            actors_by_name = copy(self._all_tournament_actors(tournament))
 
         actors_by_name.sort(key=lambda p: p.last_name)
 
@@ -445,9 +445,9 @@ class ReportController(Controller):
     def report_actors_by_ranking(self, tournament=None):
         actors_by_ranking = None
         if tournament is None:
-            actors_by_ranking = deepcopy(self._all_actors())
+            actors_by_ranking = copy(self._all_actors())
         else:
-            actors_by_ranking = deepcopy(self._all_tournament_actors(
+            actors_by_ranking = copy(self._all_tournament_actors(
                 tournament
             ))
 
@@ -460,13 +460,7 @@ class ReportController(Controller):
             self._view.io().tell(a.ranking + '\t' + a.name)
 
     def _all_actors(self):
-        tournaments = self._model.get_all_tournaments()
-        players = []
-        for tournament in tournaments:
-            for player in tournament.players:
-                if player.name not in [p.name for p in players]:
-                    players.append(player)
-        return players
+        return self._model.get_all_players()
 
     def _all_tournament_actors(self, tournament):
         players = []

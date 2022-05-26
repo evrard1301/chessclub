@@ -3,7 +3,7 @@
 
 env
 __pycache__
-
+_minted-slides
 *.aux
 *.log
 *.nav

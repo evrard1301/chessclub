@@ -19,7 +19,7 @@ class SwissPairGenerator(PairGenerator):
         return self._generate(tournament)
 
     def _generate_first_round(self, tournament):
-        players = copy.deepcopy(tournament.players)
+        players = copy.copy(tournament.players)
         result = []
 
         players.sort(key=lambda p: int(p.ranking))
@@ -34,7 +34,7 @@ class SwissPairGenerator(PairGenerator):
         return result
 
     def _generate_from_scores(self, tournament, player_scores):
-        players = copy.deepcopy(tournament.players)
+        players = copy.copy(tournament.players)
         result = []
 
         players.sort(reverse=True, key=lambda p: player_scores[p.name])

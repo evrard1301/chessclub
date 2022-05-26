@@ -1,13 +1,5 @@
 \subsection{Conception et modélisation}
 
-\begin{frame}{Vocabulaire: définitions}
-  \begin{block}{Définitions}
-    \begin{description}
-      \item[]
-    \end{description}
-  \end{block}
-\end{frame}
-
 \begin{frame}{Vocabulaire: traductions}
   \begin{block}{Traduction en anglais du vocabulaire}
     \begin{description}
@@ -19,39 +11,525 @@
     \item[Un tour] \textit{a round}
     \item[Résultats] \textit{scores}
     \item[Match nul] \textit{draw}
-    \item[Coup rapide]
     \end{description}
   \end{block}
 \end{frame}
 
 \begin{frame}{Découpage en modules}
-  
+  \begin{block}{Modèle MVC}
+    \begin{itemize}
+    \item un modèle (\textit{package} \textsc{model})
+    \item une vue (\textit{package} \textsc{view})
+    \item un contrôleur (\textit{package} \textsc{controller})
+    \end{itemize}
+  \end{block}
 \end{frame}
 
-\begin{frame}{Architecture du projet}
-  
+\begin{frame}{Architecture}
+  \begin{block}{Propriétés}
+    \begin{enumerate}
+    \item Indépendance du modèle vis-à-vis du contrôleur et de la vue.
+    \item Le contrôleur est le point central de l'architecture.
+    \item La vue et le modèle communiquent \textit{via} des
+      évènements.
+    \end{enumerate}
+  \end{block}  
+\end{frame}
+
+\begin{frame}{Architecture}
+  \begin{center}
+    \begin{figure}
+      \includegraphics[scale=0.205]{img/architecture.png}
+      \caption{Les \textit{packages}}
+    \end{figure}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Le modèle}
+  \begin{center}
+    \begin{figure}
+      \includegraphics[scale=0.25]{img/model.png}
+      \caption{Structure du modèle}
+    \end{figure}
+  \end{center}
+
+  \begin{block}{Remarque}
+    \begin{itemize}
+    \item \textsc{ChessClub} implémente le \textit{design pattern
+      Facade}.
+    \end{itemize}
+    
+  \end{block}
+\end{frame}
+
+\begin{frame}{La vue}
+  \begin{center}
+    \begin{figure}
+      \includegraphics[scale=0.3]{img/view.png}
+      \caption{Structure de la vue}
+    \end{figure}
+  \end{center}
+
+  \begin{block}{Construction de la vue}
+    \begin{itemize}
+    \item La \underline{\textit{factory}}
+      \begin{itemize}
+      \item permet de charger la description XML de la vue.
+      \item utilise un \underline{\textit{Builder}} pour construire la vue.
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{La vue: représentation XML}
+  \small
+
+  \begin{minted}{xml}
+    <menu title='Menu Principal'>
+        <entry action='S'>Sauvegarder</entry>
+        <entry action='C'>Charger</entry>
+
+        <menu title="Rapports" action="R">
+        <entry action='a'>Acteurs (par nom)</entry>
+        <entry action='A'>Acteurs (par classement)</entry>
+        <entry action='t'>Tournoi (acteurs par nom)</entry>
+        <entry action='T'>
+            Tournoi (acteurs par classement)
+        </entry>
+        <entry action='l'>Liste des tournois</entry>
+        <entry action='L'>Liste des tours</entry>
+        <entry action='m'>Liste des matchs</entry>
+        <link action='q'>Menu Principal</link>
+        </menu>
+
+        <!-- ... -->
+    </menu>
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Événements}
+  \footnotesize
+  \begin{minted}{python}
+class Event:
+    def __init__(self, name, **kwargs):
+        self._name = name
+        self._values = kwargs
+
+    def name(self):
+        return self._name
+
+    def get(self, value_name):
+        return self._values[value_name]
+  \end{minted}
+  \begin{block}{Principe}
+    \begin{itemize}
+    \item Utilisation du \textit{design pattern Observer}.
+    \item \textsc{EventSource} émet des événements.
+    \item \textsc{EventListener} reçoit des événements.
+    \item $\rightarrow$ \textsc{EventListener} \underline{observe}
+      \textsc{EventSource}.
+    \end{itemize}
+    
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Émettre des événements}
+  \footnotesize
+  \begin{minted}{python}
+class EventSource:
+    def __init__(self):
+        self._listeners = []
+
+    def add_listener(self, listener):
+        self._listeners.append(listener)
+
+    def remove_listener(self, listener):
+        self._listeners.remove(listener)
+
+    def notify(self, event):
+        for listener in self._listeners:
+            listener.on_event(event)
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Recevoir des événements}
+  \footnotesize
+  \begin{minted}{python}
+class EventListener(ABC):
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def on_event(self):
+        pass
+  \end{minted}
+\end{frame}
+
+\begin{frame}{Le contrôleur}
+  \begin{center}
+    \begin{figure}
+      \includegraphics[scale=0.3]{img/controller.png}
+      \caption{Structure du contrôleur}
+    \end{figure}
+  \end{center}
+
+  \begin{block}{Le routeur}
+    \begin{itemize}
+    \item \textsc{AppRouter} contrôle l'application.
+    \item Chaque contrôleur est un état de \textsc{AppRouter}.
+    \item Utilisation du \textit{Design Pattern State}.
+    \end{itemize}
+    
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Exemple de contrôleur}
+  \footnotesize
+  \begin{minted}{python}
+    class MainController(Controller):
+    def __init__(self):
+        super().__init__()
+        self._player_info = []
+        self._play_ctrl = PlayController(self)
+        self._setup_ctrl = SetupController(self)
+        self._report_ctrl = ReportController(self)
+
+    def on_event(self, event):
+        if event.get('action') == 'S':
+            self.on_save()
+
+        if event.get('action') == 'C':
+            self.on_load()
+
+        if event.get('action') == 'R':
+            self._router.set_controller(self._report_ctrl)
+
+    # ...
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Interactions avec l'utilisateur}
+  \footnotesize
+  \begin{minted}{python}
+    class UserInteractor(ABC):
+        @abstractmethod
+        def ask(self, msg):
+            pass
+
+        @abstractmethod
+        def tell(self, msg):
+            pass
+        
+        
+    class ConsoleUserInteractor(UserInteractor):
+        def ask(self, msg):
+            if msg == '\\quitter':
+            raise StopAndSave()
+            return input(msg)
+        
+        def tell(self, msg):
+            print(msg)
+
+        # ...
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Exemples d'interactions}
+  \begin{minted}{python}
+    self._view.io().tell(f'\nMatch: {pair[0].name} '
+                         f'contre {pair[1].name}')
+    res = self._view.io().ask('Résultat du match '
+                              f'(0: {pair[0].name}, '
+                              f'1: {pair[1].name}, '
+                              '2: match nul): ')
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Instanciation des composants}
+  \footnotesize
+  \begin{minted}{python}
+    if __name__ == '__main__':
+        user_interactor = ConsoleUserInteractor()
+        factory = XMLFactory(user_interactor)
+        view = factory.load_from_file('data/menu.xml')
+        datastore = TinyDBStore()
+        model = ChessClub(datastore)
+        
+        router = AppRouter(user_interactor, model, view)
+        router.set_error_manager(PrintErrorManager(user_interactor))
+        router.set_controller(MainController())
+        
+        try:
+            router.run()
+        except KeyboardInterrupt:
+            print()
+            model.quit()
+  \end{minted}
 \end{frame}
 
 \subsection{Domaine métier}
 
-\begin{frame}{Tournois et classement}
-  
+\begin{frame}[fragile]{Système Suisse des tournois}
+  \footnotesize
+  \begin{minted}{python}
+class PairGenerator(ABC):
+    @abstractmethod
+    def generate(self, tournament):
+        pass
+
+
+class SwissPairGenerator(PairGenerator):
+    def __init__(self):
+        pass
+
+    def generate(self, tournament):
+        if tournament.is_first_round():
+            return self._generate_first_round(tournament)
+        return self._generate(tournament)
+  \end{minted}
 \end{frame}
 
-\begin{frame}{Génération de rapports}
-  
+\begin{frame}[fragile]{Système Suisse des tournois: premier tour}
+  \footnotesize
+  \begin{minted}{python}
+def _generate_first_round(self, tournament):
+    players = copy.deepcopy(tournament.players)
+    result = []
+
+    players.sort(key=lambda p: int(p.ranking))
+
+    i = 0
+    total = int(len(players)/2)
+
+    while i < total:
+        result.append((players[i], players[total + i]))
+        i += 1
+
+    return result
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Système Suisse des tournois: tours suivants}
+  \tiny
+  \begin{minted}{python}
+def _generate_from_scores(self, tournament, player_scores):
+    players = copy.deepcopy(tournament.players)
+    result = []
+
+    players.sort(reverse=True, key=lambda p: player_scores[p.name])
+
+    while len(players) > 0:
+        p0 = 0
+        p1 = 1
+
+        my_round = tournament.previous_round()
+        if my_round is not None:
+            while True:
+                matches = tournament.find_matches_by_players(players[p0],
+                                                             players[p1])
+                if len(matches) > 0:
+                    p1 += 1
+                else:
+                    break
+
+        result.append((players[p0], players[p1]))
+
+        del players[p0]
+        del players[p1 - 1]
+
+    return result
+  \end{minted}
 \end{frame}
 
 \begin{frame}{Persistance}
-  
+  \begin{block}{Principes}
+    \begin{itemize}
+    \item Un \textsc{DataStore} est un objet capable de
+      \begin{itemize}
+      \item stocker,
+      \item sauvegarder et
+      \item charger les données importantes du système.
+      \end{itemize}
+    \item \textsc{InMemoryStore} $\rightarrow$ garde tout en mémoire
+      durant l'exécution du programme.
+    \item \textsc{TinyDBStore} $\rightarrow$ travaille avec une base
+      de données via TinyDB.
+    \end{itemize}
+  \end{block}
 \end{frame}
 
-\subsection{Contrôle de l'application}
-\begin{frame}{Contrôle de l'application}
-  
+\begin{frame}[fragile]{Persistance}
+  \tiny
+  \begin{minted}{python}
+    class DataStore(ABC):
+    def __init__(self):
+        self._players = []
+        self._tournaments = []
+
+    @abstractmethod
+    def save(self):
+        pass
+
+    @abstractmethod
+    def load(self):
+        pass
+
+    def store_player(self, player):
+        self._players.append(player)
+
+    def store_tournament(self, tournament):
+        self._tournaments.append(tournament)
+
+    def players(self):
+        return self._players
+
+    def tournaments(self):
+        return self._tournaments
+
+    def find_players_by_ranking(self, ranking):
+        return [p for p in self._players if int(p.ranking) == int(ranking)]
+
+    def find_players_by_name(self, name):
+        return [p for p in self._players if p.name == name][0]
+
+  \end{minted}
 \end{frame}
 
-\subsection{Interface utilisateur}
-\begin{frame}{Interface utilisateur}
-  
+\begin{frame}[fragile]{Persistance: sérialisation d'un match}
+  \footnotesize
+  \begin{minted}{python}
+    @property
+    def __dict__(self):
+        return {
+            'player_0': self._player_0.name,
+            'player_1': self._player_1.name,
+            'result': int(self._result)
+        }
+  \end{minted}
 \end{frame}
+
+\begin{frame}[fragile]{Persistance: sérialisation d'un tour}
+  \footnotesize
+  \begin{minted}{python}
+    @property
+    def __dict__(self):
+        result = {
+            'name': self._name,
+            'start': str(self._start),
+            'end': str(self._end),
+            'matches': []
+        }
+
+        for m in self._matches:
+            result['matches'].append(m.__dict__)
+
+        return result
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Persistance: sérialisation d'un tournoi}
+  \footnotesize
+  \begin{minted}{python}
+    @property
+    def __dict__(self):
+        result = {}
+        result['name'] = self._name
+        result['place'] = self._place
+        result['start_date'] = str(self._start_date)
+        result['end_date'] = str(self._end_date)
+        result['category'] = self._category
+        result['description'] = self._description
+        result['players'] = [p.name for p in self._players]
+
+        rounds = []
+        for r in self._rounds:
+            rounds.append(r.__dict__)
+        result['rounds'] = rounds
+        result['current_round'] = self._current_round
+
+        return result
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Sauvegarde}
+  \footnotesize
+  \begin{minted}{python}
+        def save(self):
+        player_table = self._db.table('Player')
+        player_table.truncate()
+        for player in self._players:
+            player_table.insert(player.__dict__)
+
+        tournament_table = self._db.table('Tournament')
+        tournament_table.truncate()
+        for tournament in self._tournaments:
+            tournament_table.insert(tournament.__dict__)
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Chargement: les joueurs}
+  \footnotesize
+  \begin{minted}{python}
+    def load(self):
+        player_table = self._db.table('Player')
+
+        for p in player_table.all():
+            self.store_player(Player(
+                p['last_name'],
+                p['first_name'],
+                p['date_of_birth'],
+                p['gender'],
+                p['ranking']
+            ))
+
+        tournament_table = self._db.table('Tournament')
+        for t in tournament_table.all():
+            # -> suite
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Chargement: les tournois}
+  \tiny
+  \begin{minted}{python}
+            the_tournament = Tournament('', '', '', '', '', '')
+            the_tournament._name = t['name']
+            the_tournament._place = t['place']
+            the_tournament._start_date = t['start_date']
+            the_tournament._end_date = t['end_date']
+            the_tournament._category = t['category']
+            the_tournament._description = t['description']
+            the_tournament._current_round = t['current_round']
+
+            for name in t['players']:
+                the_tournament.add_player(self.find_players_by_name(name))
+
+            for r in t['rounds']:
+                # -> suite
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Chargement: les tours et les matchs}
+  \footnotesize
+  \begin{minted}{python}
+    the_round = Round(r['name'],
+                      datetime.date(*[
+                          int(i)
+                          for i in r['start'].split('-')
+                      ]),
+                      datetime.date(*[
+                          int(i)
+                          for i in r['end'].split('-')
+                      ]))
+
+    for match in r['matches']:
+        m = Match(self.find_players_by_name(match['player_0']),
+                  self.find_players_by_name(match['player_1']))
+        m.set_result(int(match['result']))
+        the_round.add_match(m)
+
+    the_tournament.add_round(the_round)
+
+self._tournaments.append(the_tournament)
+  \end{minted}
+\end{frame}
+

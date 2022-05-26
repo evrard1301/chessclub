@@ -85,20 +85,21 @@ class TinyDBStore(DataStore):
         tournament_table = self._db.table('Tournament')
         tournament_table.truncate()
         for tournament in self._tournaments:
-            print(tournament.__dict__)
             tournament_table.insert(tournament.__dict__)
 
     def load(self):
         player_table = self._db.table('Player')
 
         for p in player_table.all():
-            self.store_player(Player(
+            player = Player(
                 p['last_name'],
                 p['first_name'],
                 p['date_of_birth'],
                 p['gender'],
                 p['ranking']
-            ))
+            )
+
+            self.store_player(player)
 
         tournament_table = self._db.table('Tournament')
         for t in tournament_table.all():

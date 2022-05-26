@@ -12,6 +12,16 @@ class Player:
         self.ranking = ranking
 
     @property
+    def __dict__(self):
+        return {
+            'last_name': self.last_name,
+            'first_name': self.first_name,
+            'date_of_birth': str(self.date_of_birth),
+            'gender': self.gender,
+            'ranking': self.ranking
+        }
+
+    @property
     def name(self):
         return self.first_name + ' ' + self.last_name
 

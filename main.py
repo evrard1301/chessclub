@@ -96,8 +96,8 @@ if __name__ == '__main__':
     view = factory.load_from_file('data/menu.xml')
     datastore = None
 
-    if args.db:
-        datastore = TinyDBStore(args.db)
+    if args.database:
+        datastore = TinyDBStore(args.database)
     else:
         datastore = TinyDBStore('db.json')
 

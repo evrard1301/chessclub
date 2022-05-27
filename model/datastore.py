@@ -71,10 +71,10 @@ class InMemoryStore(DataStore):
 
 
 class TinyDBStore(DataStore):
-    def __init__(self):
+    def __init__(self, db_name):
         self._players = []
         self._tournaments = []
-        self._db = tinydb.TinyDB('db.json')
+        self._db = tinydb.TinyDB(db_name)
 
     def save(self):
         player_table = self._db.table('Player')

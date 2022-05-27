@@ -1,3 +1,4 @@
+import argparse
 from controller.approuter import AppRouter
 from controller.approuter import PrintErrorManager
 from controller.controllers import MainController
@@ -86,10 +87,20 @@ def example_tournament2(name, model, datastore):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--database', help='select the database used')
+    args = parser.parse_args()
+
     user_interactor = ConsoleUserInteractor()
     factory = XMLFactory(user_interactor)
     view = factory.load_from_file('data/menu.xml')
-    datastore = TinyDBStore()
+    datastore = None
+
+    if args.db:
+        datastore = TinyDBStore(args.db)
+    else:
+        datastore = TinyDBStore('db.json')
+
     model = ChessClub(datastore)
 
     # Uncomment for manual testing

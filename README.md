@@ -52,3 +52,16 @@ Enfin, une aide est disponible avec les flags ``-h`` et ``--help``.
 ```
 $ python main.py --help
 ```
+
+Il est possible de générer un rapport flake8 en utilisant flake8-html.
+
+```
+$ flake8 model view controller main.py --format html --htmldir flake8_html_report
+```
+
+Le script ``make_report.sh`` fait exactement cela.
+
+```
+$ chmod +x make_report.sh
+$ ./make_report.sh
+```

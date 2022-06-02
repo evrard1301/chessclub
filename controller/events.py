@@ -35,6 +35,6 @@ class EventListener(ABC):
         pass
 
     @abstractmethod
-    def on_event(self):
+    def on_event(self, event):
         """Called when the event source notify an event."""
         pass

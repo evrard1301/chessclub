@@ -181,10 +181,10 @@ class SetupController(Controller):
                                  f' {player.last_name}')
 
         self._view.io().tell('-------- Tours --------')
-        for i in range(0, len(self._tournament.rounds), 2):
-            self._view.io().tell(f'Tour {int(i/2)}: du'
-                                 f' {self._tournament.rounds[i]} au'
-                                 f' {self._tournament_rounds[i+1]}')
+        for i in range(0, len(self._tournament.rounds)):
+            self._view.io().tell(f'Tour {i + 1}: du'
+                                 f' {self._tournament.rounds[i].start} au'
+                                 f' {self._tournament.rounds[i].end}')
 
     def _add_player(self):
         player_id = int(self._input('ID du joueur: '))

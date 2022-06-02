@@ -15,7 +15,7 @@ Feature: I can create a player
 		   When I select "j"
 		   When I set the last name to be "Sapin"
 		   When I set the first name to be "Johanne"
-		   When I set the date of birth to be "12/08/98"
+		   When I set the date of birth to be "12/08/1998"
 		   When I set the gender to be "F"
 		   When I set the ranking to be "2"
 		   Then a new player is created
